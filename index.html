@@ -396,6 +396,57 @@ body * {
   }
 }
 
+@media (max-width: 768px) {
+  /* 百寶屋往下＆靠右移動 */
+  div.fixed.z-\[9999\] {
+    top: 220px !important;
+    left: auto !important;
+    right: 5vw !important;
+    width: 88vw !important;
+  }
+
+  /* 頭像縮小 */
+  .avatar-img {
+    width: 96px !important;
+    height: 96px !important;
+  }
+
+  /* 卡片文字寬鬆一點 */
+  .nebula-soft-card {
+    font-size: 1rem;
+    line-height: 1.7;
+    padding: 1.25rem;
+  }
+
+  /* tab 按鈕調整為直排 */
+  .flex.flex-wrap.gap-2.mb-4 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .tab-content {
+    margin-top: 1rem;
+  }
+
+  /* 角色小人圖放大一些 */
+  .absolute.z-30 img {
+    width: 100px !important;
+  }
+
+  /* 下方圖片不超出 */
+  img.w-full.h-auto.object-contain.rounded-xl.shadow-lg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
  </style>
 
 
