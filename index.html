@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>菠蘿宇宙名片</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+
+    <body>
+<!-- 雪球的百寶屋（強化版） -->
+<div class="fixed top-[160px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center">
+  <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
+  雪球的百寶屋
+</h2>
+<div class="text-sm text-white text-center leading-relaxed mb-4">
+  抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
+  本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
+  純屬娛樂性質，別太在意結果哦！
+</div>
+  <button onclick="drawFortune()" class="w-full py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
+    今日籤詩
+  </button>
+  <div id="fortune-box" class="hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-sm text-yellow-100 font-medium shadow-md ring-1 ring-yellow-400/10 animate-fadein">
+    <div id="fortune-text" class="whitespace-pre-line leading-relaxed tracking-wide"></div>
+</div>
+</div>
+
+<style>
+
+    .avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+      /* 🌌 背景星空 + 星點動畫 */
+      @keyframes sparkleFade {
+        0%, 100% { opacity: 0.25; }
+        50% { opacity: 0.45; }
+      }
+
+      body {
+        background: radial-gradient(ellipse at 50% 100%, #1c1f3f 0%, #0b0c29 60%, #050510 100%);
+        background-attachment: fixed;
+        overflow: visible;
+        overflow-y: auto;
+        position: relative;
+        z-index: 0;
+        margin: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: url('star_sparkle_overlay.png') center center / cover no-repeat;
+        mix-blend-mode: screen;
+        z-index: 0;
+        pointer-events: none;
+        animation: sparkleFade 6s ease-in-out infinite;
+      }
+
+      /* 🌠 shooting star */
+      @keyframes shootingStar {
+        0% { transform: translate(80vw, -10vh) rotate(315deg); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translate(10vw, 120vh) rotate(320deg); opacity: 0; }
+      }
+
+      .shooting-star {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 180px;
+        height: 2px;
+        background: linear-gradient(to left, white, rgba(255, 255, 255, 0));
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        transform: rotate(320deg);
+        animation: shootingStar 3.6s cubic-bezier(0.6, 0, 0.3, 1) forwards;
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+      }
+
+      /* ✅ 全新麵包動畫 */
+      @keyframes floatBread {
+  0%   { transform: translateY(100vh) rotate(0deg); opacity: 0.6; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+}
+
+      .bread-float {
+  position: fixed;
+  width: 40px;
+  pointer-events: none;
+  z-index: -1;
+  animation-name: floatBread;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-play-state: running;
+  transform-origin: center center;
+}
+
+
+/* 🌌 星雲卡片 - 柔霧透明版 */
+.nebula-soft-card {
+  position: relative;
+  overflow: visible;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.05);
+  z-index: 0;
+
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+.nebula-soft-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 180, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(180, 220, 255, 0.08) 0%, transparent 60%);
+  z-index: -1;
+  opacity: 1;
+  filter: blur(30px);
+}
+.nebula-soft-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at top left, #ffffff10, transparent 70%);
+  z-index: -2;
+}
+.tab-btn {
+  transition: all 0.3s ease;
+}
+
+
+.tab-btn {
+  padding: 4px 8px;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f9f9f9;
+}
+
+.tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@keyframes nebulaSoftFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.05); }
+}
+/* ⭐ 星星角落裝飾 */
+.nebula-soft-card {
+  position: relative;
+}
+
+.corner-star {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  opacity: 0.6;
+  animation: twinkle 3s ease-in-out infinite;
+  z-index: 1; /* ⭐ 放到最上層 */
+  pointer-events: none; /* ✨ 不影響滑鼠 */
+}
+
+.corner-star.tl {
+  top: -12px;
+  left: -12px;
+}
+
+.corner-star.br {
+  bottom: -12px;
+  right: -12px;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@media (max-width: 480px) {
+  .corner-star {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tab-btn {
+    font-size: 0.75rem; /* 再小一點可讀性佳 */
+    padding: 4px 10px;
+  }
+
+  .nebula-soft-card {
+    padding: 1.25rem;
+  }
+}
+.nebula-subtitle {
+  position: relative;
+  padding-left: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.nebula-subtitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #f0abfc, #a78bfa, #60a5fa); /* 紫→粉→藍 */
+  box-shadow: 0 0 4px rgba(240, 171, 252, 0.5);
+}
+.bread-float,
+.shooting-star {
+  position: fixed;
+  will-change: transform;
+  contain: layout paint;
+  isolation: isolate;
+}
+
+body * {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+
+.trail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFD966; /* 比 #BB9955 更亮的金黃色 */
+  box-shadow: 
+    0 0 8px #FFD966,
+    0 0 12px #FFD966AA,
+    0 0 24px #FFEFAA66; /* 添加柔光層次 */
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: fadeOut 0.6s ease-out forwards;
+  z-index: 9999;
+}
+
+/* ✅ 淡出動畫 */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* ✅ 漂浮動畫（選一個即可） */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.floating,
+.animate-floaty {
+  animation: floaty 4s ease-in-out infinite;
+}
+
+/* ✅ 淡入動畫 */
+@keyframes fadein {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.animate-fadein {
+  animation: fadein 0.6s ease-out forwards;
+}
+
+/* ✅ 輕微搖晃警告 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+}
+.shake-alert {
+  animation: shake 0.15s ease-in-out infinite;
+}
+
+/* ✅ 閃爍紅字 */
+@keyframes blinkRed {
+  0%, 100% { color: #f87171; } /* rose-400 */
+  50% { color: #fecaca; }      /* rose-200 */
+}
+.blink-red {
+  animation: blinkRed 1s ease-in-out infinite;
+}
+
+/* ✅ 特別吉彩虹閃爍 */
+@keyframes rainbowGlow {
+  0% { text-shadow: 0 0 6px #ff6ec4, 0 0 12px #7873f5; }
+  50% { text-shadow: 0 0 10px #ffdd40, 0 0 20px #7af5ff; }
+  100% { text-shadow: 0 0 6px #ff6ec4, 0 0 12px #7873f5; }
+}
+.text-glow-rainbow {
+  animation: rainbowGlow 1.2s ease-in-out infinite;
+  font-weight: bold;
+}
+
+/* ⭐ 星星動畫 */
+@keyframes fallStars {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(40px) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+.falling-stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.falling-stars span {
+  position: absolute;
+  color: #fcd34d; /* 星星顏色 - yellow-300 */
+  font-size: 0.75rem;
+  opacity: 0.6;
+  animation: fallStars 3.5s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .fixed.top-\[160px\].left-\[48px\] {
+    left: 5vw !important;
+    top: 120px !important;
+    width: 90vw !important;
+  }
+
+  .avatar-img {
+    width: 96px !important;
+    height: 96px !important;
+  }
+
+  .nebula-soft-card {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    padding: 1.25rem;
+  }
+
+  .flex.flex-wrap.gap-2.mb-4 {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .absolute.-bottom-8.-right-8.z-30 {
+    right: 1rem !important;
+    bottom: -2rem !important;
+  }
+
+  .absolute.-bottom-8.-right-8.z-30 img {
+    width: 80px !important;
+  }
+
+  img.w-full.h-auto.object-contain.rounded-xl.shadow-lg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+ </style>
+
+
+<script>
+  document.addEventListener('mousemove', function(e) {
+    const trail = document.createElement('div');
+    trail.className = 'trail';
+    trail.style.left = e.pageX + 'px';
+    trail.style.top = e.pageY + 'px';
+    document.body.appendChild(trail);
+    setTimeout(() => trail.remove(), 500); // 尾巴存活時間
+  });
+
+</script>
+
+  </head>
+
+  <body class="text-white font-sans">
+    <script>
+      function createBread() {
+  const existing = document.querySelectorAll('.bread-float');
+  if (existing.length >= 15) return;  // ✅ 限制麵包數量
+
+  const img = document.createElement("img");
+  img.src = "meronpan.png";
+  img.className = "bread-float";
+  const x = Math.random() * 80 + 10;
+  const duration = 20 + Math.random() * 6;
+
+  img.style.left = `${x}vw`;
+  img.style.bottom = `-10vh`;
+  img.style.animationDuration = `${duration}s`;
+
+  document.body.appendChild(img);
+  setTimeout(() => img.remove(), duration * 1000);
+}
+
+// 一開始生成 6 顆
+for (let i = 0; i < 4; i++) {
+  setTimeout(createBread, i * 500);
+}
+
+// 每 2 秒新增 1 顆
+setInterval(createBread, 2000);
+
+      function createShootingStar() {
+        const star = document.createElement("div");
+        star.classList.add("shooting-star");
+        const startX = Math.random() * 80 + 10;
+        const startY = Math.random() * 30;
+        const endX = startX - (Math.random() * 30 + 20);
+        const endY = startY + (Math.random() * 50 + 40);
+        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+        star.style.top = `${startY}vh`;
+        star.style.left = `${startX}vw`;
+        star.style.transform = `rotate(${angle}deg)`;
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 4000);
+      }
+
+      function launchRandomStar() {
+        createShootingStar();
+        const nextDelay = Math.random() * 3000 + 6000;
+        setTimeout(launchRandomStar, nextDelay);
+      }
+
+
+       launchRandomStar();
+    </script>
+
+    <div class="fixed inset-0 overflow-y-scroll flex flex-col items-center justify-start px-4 py-12 space-y-12 z-10">
+      <img src="avatar.JPG" alt="我的頭貼"
+          class="avatar-img mx-auto -mb-4 z-10 fade-in" />
+      <div class="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl max-w-md w-full text-center border border-white/20">
+        <h1 class="text-3xl font-extrabold text-transparent bg-gradient-to-r from-indigo-500 via-purple-400 to-pink-400 bg-clip-text drop-shadow-[0_0_6px_rgba(180,160,255,0.4)]">
+          法式菠蘿麵包
+        </h1>
+        <p class="text-sm mt-2 italic tracking-wide leading-relaxed text-white/80">
+          暱稱｜雪球・菠蘿・自取
+        </p>
+        <p class="text-white/70 text-sm mt-4 tracking-wide">
+          ◇ 爆肝工程師　★ 電波系　○ 魔法廚
+        </p>
+        <p class="text-white/50 text-xs mt-3 italic">
+          —— 歡迎來到菠蘿麵包星 ——
+        </p>
+
+       <div class="absolute -bottom-8 -right-8 z-30">
+    <img src="inori.GIF"
+         alt="角色"
+         class="w-36 h-auto drop-shadow-xl floating pointer-events-none">
+  </div>
+  </div>
+
+      <div class="mt-10 space-y-6 text-left text-white/80 text-sm leading-relaxed">
+  <div>
+    <h2 class="text-fuchsia-400 font-bold text-base mb-1">關於我</h2>
+    <p>
+      喜歡玩遊戲、音樂鑑賞、旅行。<br>
+      雖然偶爾會飛來飛去，但最喜歡的地方其實還是家裡。
+    </p>
+  </div>
+  <div>
+    <h2 class="text-fuchsia-400 font-bold text-base mb-1">技能 / 喜好</h2>
+    <ul class="list-disc list-inside space-y-1">
+      <li>程式、網頁設計</li>
+      <li>一言不合就飛出國，然後又想回家（矛盾）</li>
+      <li>熬夜兩天不睡覺（救命）</li>
+    </ul>
+  </div>
+</div>
+<div class="nebula-soft-card mt-10 text-white/80 text-sm leading-relaxed space-y-3">
+  <img src="star_sparkle.png" class="corner-star tl" alt="星星角落左上">
+  <img src="star_sparkle.png" class="corner-star br" alt="星星角落右下">
+  <div class="space-x-2 text-xs">
+   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide">
+  ✨ 關於我 ｜ 菠蘿麵包
+</h2>
+     <div class="flex flex-wrap gap-2 mb-4">
+    <button class="tab-btn text-xs text-white/70 px-3 py-1 rounded-full hover:ring-1 hover:ring-white/30 transition"
+        data-tab="intro">
+  自我介紹
+</button>
+
+<button class="tab-btn text-xs text-white px-3 py-1 rounded-full"
+        data-tab="redflag">
+  關於雷點
+</button>
+
+<button class="tab-btn text-xs text-white px-3 py-1 rounded-full"
+        data-tab="fandom">
+  近期深坑
+</button>
+
+<button class="tab-btn text-xs text-white px-3 py-1 rounded-full"
+ data-tab="pairing">
+ 推角＆CP
+</button>
+
+<button class="tab-btn text-xs text-white px-3 py-1 rounded-full"
+ data-tab="social">
+  社群帳號
+</button>
+
+    </div>
+  </div>
+<div class="tab-content" data-tab="intro">
+  <!-- 🎯 段落 1：身份與定位 -->
+ <h3 class="nebula-subtitle">簡介</h3>
+  <p class="mb-4 leading-relaxed text-white/80">
+    我是雪球，可以叫我麵包 / 菠蘿，只要讓我知道在叫我就行。<br>
+    現為在逃社畜，出沒時間不一定，但通常白天一定會在。
+  </p>
+
+<h3 class="nebula-subtitle">性格</h3>
+  <p class="mb-4 leading-relaxed text-white/80">
+    平常話不多，但如果遇到有相同興趣的人話就會變得很多。<br>
+    會吐槽自己，是個怪人（欸）
+  </p>
+
+<h3 class="nebula-subtitle">活動範圍</h3>
+  <p class="mb-4 leading-relaxed text-white/80">
+    座標台灣北部，時常跑場次（CWT、FF、PF 等）
+  </p>
+
+<h3 class="nebula-subtitle">個人風格</h3>
+  <p class="leading-relaxed text-white/80">
+    我的思考方式有點奇怪，所以常常會跳話題，有點電波系這樣（？）<br>
+    但自認很好聊天（大概）
+  </p>
+  </div>
+<div class="tab-content" data-tab="redflag">
+  <!-- 標題 -->
+  <h3 class="nebula-subtitle">關於雷點</h3>
+
+  <!-- 段落 1：可能會雷的地方 -->
+  <p class="mb-4 leading-relaxed text-white/80">
+    可能會雷到你的地方：
+    髒話（熟了之後）、表情符號（例如 🫶）、句尾波浪號（有時）、中國用語、不讀不回(嚴重)
+  </p>
+
+  <!-- 段落 2：回覆頻率 -->
+  <p class="mb-4 leading-relaxed text-white/80">
+    回覆的速度有時快有時慢得感人，如果會介意的話請迴避
+  </p>
+
+  <!-- 段落 3：明確雷點列舉 -->
+  <p class="leading-relaxed text-pink-400 font-semibold">
+    雷點：周邊說教人（巨雷）、瘋狂砍價人、一言不合免運人
+  </p>
+</div>
+  <div class="tab-content" data-tab="fandom">
+  <!-- 主段落標題 -->
+  <h3 class="nebula-subtitle">近期深坑（2025/06/01 更新）</h3>
+
+  <!-- 區塊：目前主坑 -->
+  <h4 class="font-semibold text-white mt-4 mb-1">目前主坑</h4>
+  <ul class="list-disc list-inside text-white/80 leading-relaxed mb-4">
+    <li>
+      <strong>ave mujica</strong>：會去看 LIVE、買周邊，基本上有活動都會去。
+    </li>
+  </ul>
+
+  <!-- 區塊：暫退關注中 -->
+  <h4 class="font-semibold text-white mt-4 mb-1">暫退關注中</h4>
+  <ul class="list-disc list-inside text-white/80 leading-relaxed mb-4">
+    <li>
+      <strong>崩鐵</strong>：已退坑，但仍有在關注。
+    </li>
+  </ul>
+
+  <!-- 區塊：預計回坑 -->
+  <h4 class="font-semibold text-white mt-4 mb-1">預計回坑</h4>
+  <ul class="list-disc list-inside text-white/80 leading-relaxed">
+    <li>
+      <strong>明日方舟</strong>：預計回坑，以陸服為主。
+    </li>
+  </ul>
+</div>
+<div class="tab-content hidden" data-tab="pairing">
+  <h3 class="nebula-subtitle">推角</h3>
+</li>
+  <ul class="list-disc list-inside text-white/80 leading-relaxed mb-4">
+  <li style="margin-bottom: 1rem;">
+  <strong style="color: #BB9955;">ave mujica：</strong>
+  <span style="color: #BB9955; font-size: 1.05rem; font-weight: 500;">
+    三角初華
+  </span><br>
+  <span style="color: #BB9955; font-size: 1.05rem; font-weight: 500; display: block; margin-top: 0.2rem;">
+    超級單推人，這個金貴女人從冷到超燙，簡直吞金獸<br>
+    但我還是好喜歡好喜歡嗚嗚嗚嗚
+  </span>
+  <hr style="border: none; border-top: 1px solid #ffffff33; margin-top: 0.8rem;" />
+</li>
+    <li><strong>バンドリ：</strong>(主推) 三角初華；(副推) 青葉モカ</li>
+    <li><strong>明日方舟：</strong>(主推) 水月、Logos；(副推) 傀影、見行者</li>
+    <li><strong>崩鐵：</strong>丹恆</li>
+    <li><strong>時空中的繪旅人：</strong>路辰</li>
+    <li><strong>プロセカ：</strong>(主推) 日野森志步；(副推) 神代類、東雲彰人、天馬司、青柳冬彌</li>
+    <li><strong>原神：</strong>溫迪、楓原萬葉</li>
+    <li><strong>重返未來1999：</strong>維爾汀、槲寄生、紅弩箭、37</li>
+  </ul>
+
+<h3 class="nebula-subtitle">CP</h3>
+<ul class="list-disc list-inside text-white/80 leading-relaxed mb-4">
+  <li>崩鐵基本雜食，但丹恆相關 CP 只吃丹穹／丹星。</li>
+  <li>
+    邦邦：主食モカ蘭（從開服入坑邦就推）；<br>
+    雷：微雷初祥愛情向（抱歉我真的吃不下去，但CB向OK）<br>
+    其餘雜食，沒特別挑
+  </li>
+</ul>
+<p class="text-white/80 leading-relaxed">
+  <span style="color: #f87171;">乙女向作品不吃任何腐向配對。</span>
+</p>
+</div>
+<!-- 卡片4：社群帳號 -->
+<div class="tab-content hidden" data-tab="social">
+  <h2 class="nebula-subtitle">可以到下面的社群找我</h2>
+  <p class="text-sm leading-relaxed space-y-1">
+    <a href="https://www.facebook.com/share/18BsNi6K1v/?mibextid=wwXIfr" class="block text-blue-400 underline" target="_blank">
+  Facebook：法式菠蘿麵包
+    </a>
+    <a href="https://www.plurk.com/snow_mizuki" class="block text-pink-400 underline" target="_blank">
+      Plurk：@snow_mizuki
+    </a>
+  </p>
+</div>
+</div>
+
+<!-- 🎮 近期遊戲截圖（獨立展示卡） -->
+<section class="mt-20 mb-16">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl text-white text-center border border-white/10">
+      <h3 class="text-xl font-bold text-yellow-300 mb-4">遊戲ID｜歡迎加友</h3>
+      <div class="overflow-hidden rounded-xl">
+        <img src="BD.png" alt="遊戲截圖" class="w-full h-auto object-contain rounded-xl shadow-lg">
+      </div>
+      <p class="text-base text-white font-semibold mt-4 tracking-wide">
+  バンドリ日服ID：<span class="font-mono">29730501</span>
+</p>
+    </div>
+  </div>
+</section>
+
+ <script>
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  function activateTab(tabName) {
+    tabContents.forEach(content => {
+      content.classList.toggle("hidden", content.dataset.tab !== tabName);
+    });
+
+    tabButtons.forEach(btn => {
+      const isActive = btn.dataset.tab === tabName;
+      btn.classList.toggle("active", isActive);
+
+      btn.classList.remove("ring-2", "ring-fuchsia-400", "bg-white/10", "text-white", "shadow-md", "text-white/70");
+
+      if (isActive) {
+        btn.classList.add("ring-2", "ring-fuchsia-400", "bg-white/10", "text-white", "shadow-md");
+      } else {
+        btn.classList.add("text-white/70");
+      }
+    });
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.tab;
+      activateTab(tab);
+    });
+  });
+
+  // ✅ 預設啟用第一個 tab
+  if (tabButtons.length > 0) {
+    activateTab(tabButtons[0].dataset.tab);
+  }
+
+let isDrawing = false;
+
+const fortunes = [
+  `🌟 大吉
+今天是個適合展開新冒險的日子。
+請相信自己的直覺，它會帶你找到幸運之地。
+—— 推薦：快去買周邊！有機會遇到好價！ ✨`,
+
+  `✨ 中吉
+事情會一一解開，心情也會慢慢變晴。
+雖然今天不是最閃耀的一天，但也足夠溫暖。
+—— 推薦：快去買周邊讓自己心情變更好！`,
+
+  `🍵 小吉
+沒什麼特別壞的事，但也沒特別好運。
+穩穩過就很好，不用太強求結果。
+—— 推薦：今天適合耍廢＋補眠+買周邊`,
+
+  `🌘 末吉
+有些煩悶可能讓你皺眉，但也可能是轉機的開始。
+靜下心，會有不錯的靈感出現。
+—— 推薦：去買周邊改運`,
+
+  `🌑 凶
+今天心浮氣躁，容易被瑣事影響。
+請減少外界干擾，給自己一些時間喘息。
+—— 推薦：躺在床上裝死+買周邊 🛌`,
+
+  `💀 大凶
+注意言語與行動，小心捲入不必要的麻煩。
+今天什麼都不要做，安靜就是保命。
+—— 推薦：直接關機，睡到明天，睡前別忘記買周邊`
+];
+
+const rareFortune = `🌈 特別吉
+今日氣場超強，命運之神正在幫你加持！
+所有願望都有機會實現（包括吃到限量周邊）。
+—— 推薦：今天的你適合大膽嘗試新事物，買周邊也要買最好的！`;
+
+function drawFortune() {
+  if (isDrawing) return;
+  isDrawing = true;
+
+  const box = document.getElementById("fortune-box");
+  const textEl = document.getElementById("fortune-text");
+
+ const isRare = Math.random() < 0.05;
+  const fortune = isRare
+    ? rareFortune
+    : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+  box.classList.remove("hidden");
+  textEl.textContent = "";
+  textEl.classList.remove("text-glow-rainbow");
+textEl.classList.remove("blink-red");
+if (fortune.startsWith("💀 大凶")) {
+  void textEl.offsetWidth;
+  textEl.classList.add("blink-red");
+}
+
+
+  if (isRare) {
+    textEl.classList.add("text-glow-rainbow");
+  }
+
+  const chars = Array.from(fortune);
+  let i = 0;
+  const interval = setInterval(() => {
+    textEl.textContent += chars[i];
+    i++;
+    if (i >= chars.length) {
+      clearInterval(interval);
+      isDrawing = false;
+    }
+  }, 75);
+}
+
+</script>
+
+<footer class="relative mt-20 mb-10 text-center text-white/60 text-sm font-light">
+  <div class="inline-block border-b border-white/30 pb-2 px-4 relative">
+    
+    <!-- 🌟 星星飄落動畫 -->
+    <div class="falling-stars">
+      <span style="left: 15%; animation-delay: 0s;">✦</span>
+      <span style="left: 35%; animation-delay: 1s;">✧</span>
+      <span style="left: 55%; animation-delay: 2s;">✦</span>
+      <span style="left: 75%; animation-delay: 1.3s;">✧</span>
+      <span style="left: 90%; animation-delay: 0.6s;">✦</span>
+    </div>
+
+    <!-- 落款文字 -->
+    <span class="relative z-10">
+      本網頁製作為 <span class="font-semibold text-white/80">法式菠蘿麵包</span>
+    </span>
+  </div>
+</footer>
+  </body>
+</html>
