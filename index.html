@@ -397,32 +397,32 @@ body * {
 }
 
 @media (max-width: 768px) {
-  /* ✅ 百寶屋位置：右上、不要蓋住卡片 */
+  /* 📌 百寶屋：不再固定在畫面上，會跟著頁面滑動 */
   .fixed.z-\[9999\] {
-    position: fixed !important;
-    top: 90px !important;
-    right: 5vw !important;
-    left: auto !important;
-    width: 85vw !important;
-    z-index: 9999 !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 1.5rem auto 1rem;
+    z-index: auto !important;
   }
 
-  /* ✅ 頭像縮小 */
+  /* 頭像縮小 */
   .avatar-img {
     width: 96px !important;
     height: 96px !important;
   }
 
-  /* ✅ 卡片文字可讀性提升 */
+  /* 卡片字體與行距 */
   .nebula-soft-card {
     font-size: 1rem;
     line-height: 1.65;
     padding: 1.25rem;
   }
 
-  /* ✅ tab 按鈕縱向排列 */
+  /* tab 選單排成直向 */
   .flex.flex-wrap.gap-2.mb-4 {
-    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
@@ -433,27 +433,27 @@ body * {
     text-align: center;
   }
 
-  /* ✅ 小人圖片：靠右 + 避免漂過頭 */
+  .tab-content {
+    margin-top: 1rem;
+  }
+
+  /* 小人圖示：位置穩定靠右 */
   .absolute.z-30 {
-    bottom: -1.5rem !important;
+    bottom: -1rem !important;
     right: 1rem !important;
   }
 
   .absolute.z-30 img {
-    width: 88px !important;
+    width: 90px !important;
   }
 
-  /* ✅ 遊戲圖片不要超出 */
+  /* 圖片最大寬度控制 */
   img.w-full.h-auto.object-contain.rounded-xl.shadow-lg {
     max-width: 100%;
     height: auto;
   }
-
-  /* ✅ tab 內容上方增加間距 */
-  .tab-content {
-    margin-top: 1rem;
-  }
 }
+
 
  </style>
 
