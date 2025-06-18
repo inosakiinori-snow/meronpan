@@ -470,12 +470,17 @@ body * {
 /* 📦 百寶屋彈窗樣式 */
 .mobile-fortune-box {
   position: fixed;
-  bottom: 90px;
-  right: 20px;
+  /* bottom and right will be set dynamically by JavaScript */
   width: 85vw;
   max-width: 320px;
   z-index: 9999;
   animation: fadeIn 0.3s ease-out;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-fortune-box.hidden {
@@ -957,9 +962,26 @@ function drawFortuneDesktop() {
 }
 
 // Function to toggle mobile fortune box
-function toggleFortuneBox() {
+function toggleFortuneBox(event) {
   const mobileBox = document.getElementById("mobile-fortune-box");
+  const floatingBtn = document.querySelector('.floating-btn');
+  
+  // Toggle visibility
   mobileBox.classList.toggle("hidden");
+  
+  // If showing the box, position it near the floating button
+  if (!mobileBox.classList.contains("hidden")) {
+    // Get button position
+    const btnRect = floatingBtn.getBoundingClientRect();
+    
+    // Calculate position (above the button)
+    const boxWidth = mobileBox.offsetWidth || 320; // Default if not yet rendered
+    const boxHeight = mobileBox.offsetHeight || 200; // Default if not yet rendered
+    
+    // Position the box above the floating button
+    mobileBox.style.bottom = (window.innerHeight - btnRect.top + 20) + 'px';
+    mobileBox.style.right = (window.innerWidth - (btnRect.left + btnRect.width/2 + boxWidth/2)) + 'px';
+  }
 }
 
 // Add a mobile floating button for fortune drawing and handle device-specific display
@@ -975,8 +997,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const floatingBtn = document.createElement('div');
     floatingBtn.className = 'floating-btn';
     floatingBtn.innerHTML = '🎇';
-    floatingBtn.onclick = function() {
-      toggleFortuneBox();
+    floatingBtn.onclick = function(event) {
+      toggleFortuneBox(event);
     };
     document.body.appendChild(floatingBtn);
     
@@ -1016,8 +1038,8 @@ window.addEventListener('resize', function() {
     const newFloatingBtn = document.createElement('div');
     newFloatingBtn.className = 'floating-btn';
     newFloatingBtn.innerHTML = '🎇';
-    newFloatingBtn.onclick = function() {
-      toggleFortuneBox();
+    newFloatingBtn.onclick = function(event) {
+      toggleFortuneBox(event);
     };
     document.body.appendChild(newFloatingBtn);
   }
