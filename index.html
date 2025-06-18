@@ -963,17 +963,15 @@ function positionMobileFortuneBox() {
   if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
 
   const btnRect = floatingBtn.getBoundingClientRect();
-  const scrollY = window.scrollY || window.pageYOffset;
-  const scrollX = window.scrollX || window.pageXOffset;
   const boxWidth = mobileBox.offsetWidth || 320;
   const boxHeight = mobileBox.offsetHeight || 200;
 
-  // 以浮動標左上角為基準
-  let left = btnRect.left + scrollX;
-  let top = btnRect.top - boxHeight - 12 + scrollY; // 12px 間距
+  // 以浮動標左上角為基準（fixed 元素，不加 scrollX/scrollY）
+  let left = btnRect.left;
+  let top = btnRect.top - boxHeight - 12; // 12px 間距
 
   // 邊界檢查
-  if (top < 8) top = btnRect.bottom + 12 + scrollY;
+  if (top < 8) top = btnRect.bottom + 12;
   if (left + boxWidth > window.innerWidth) left = window.innerWidth - boxWidth - 8;
   if (left < 8) left = 8;
 
