@@ -10,7 +10,7 @@
 
     <body>
 <!-- 雪球的百寶屋（強化版） -->
-<div class="fixed top-[160px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center">
+<div class="fixed top-[160px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
   <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
   雪球的百寶屋
 </h2>
@@ -962,10 +962,16 @@ function toggleFortuneBox() {
   mobileBox.classList.toggle("hidden");
 }
 
-// Add a mobile floating button for fortune drawing
+// Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
+  // Add CSS to hide desktop fortune on mobile by default
+  const styleEl = document.createElement('style');
+  styleEl.textContent = '@media (max-width: 767px) { .desktop-fortune-container { display: none !important; } }';
+  document.head.appendChild(styleEl);
+  
   // Only add the floating button on mobile devices
   if (window.innerWidth < 768) {
+    // Create floating button
     const floatingBtn = document.createElement('div');
     floatingBtn.className = 'floating-btn';
     floatingBtn.innerHTML = '🎇';
@@ -974,8 +980,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     document.body.appendChild(floatingBtn);
     
-    // Hide desktop fortune box on mobile
-    const desktopFortuneContainer = document.querySelector('.fixed.top-\[160px\].left-\[48px\]');
+    // Ensure desktop fortune box is hidden on mobile
+    const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
     if (desktopFortuneContainer) {
       desktopFortuneContainer.style.display = 'none';
     }
@@ -987,7 +993,7 @@ window.addEventListener('resize', function() {
   const isMobile = window.innerWidth < 768;
   const floatingBtn = document.querySelector('.floating-btn');
   const mobileBox = document.getElementById('mobile-fortune-box');
-  const desktopFortuneContainer = document.querySelector('.fixed.top-\[160px\].left-\[48px\]');
+  const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
   
   // Hide mobile fortune box when switching to desktop
   if (!isMobile && mobileBox && !mobileBox.classList.contains('hidden')) {
@@ -996,7 +1002,11 @@ window.addEventListener('resize', function() {
   
   // Show/hide desktop fortune container based on device
   if (desktopFortuneContainer) {
-    desktopFortuneContainer.style.display = isMobile ? 'none' : 'block';
+    if (isMobile) {
+      desktopFortuneContainer.style.display = 'none';
+    } else {
+      desktopFortuneContainer.style.display = '';
+    }
   }
   
   // Remove floating button on desktop or add it on mobile if it doesn't exist
