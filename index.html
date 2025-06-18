@@ -474,12 +474,13 @@ body * {
   max-width: 320px;
   z-index: 9999;
   animation: fadeIn 0.3s ease-out;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
+  /* 讓背景和桌面版一致 */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
   border-radius: 12px;
   padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .mobile-fortune-box.hidden {
@@ -960,29 +961,40 @@ function drawFortuneDesktop() {
   }
 }
 
-// Function to toggle mobile fortune box
-function toggleFortuneBox(event) {
+function positionMobileFortuneBox() {
   const mobileBox = document.getElementById("mobile-fortune-box");
   const floatingBtn = document.querySelector('.floating-btn');
-  
-  // Toggle visibility
+  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
+
+  const btnRect = floatingBtn.getBoundingClientRect();
+  const scrollY = window.scrollY || window.pageYOffset;
+  const scrollX = window.scrollX || window.pageXOffset;
+  const boxWidth = mobileBox.offsetWidth || 320;
+  const boxHeight = mobileBox.offsetHeight || 200;
+
+  // 預設顯示在按鈕正上方居中
+  let left = btnRect.left + btnRect.width / 2 - boxWidth / 2 + scrollX;
+  let top = btnRect.top - boxHeight - 12 + scrollY; // 12px 間距
+
+  // 邊界檢查，避免超出視窗
+  if (left < 8) left = 8;
+  if (left + boxWidth > window.innerWidth) left = window.innerWidth - boxWidth - 8;
+  if (top < 8) top = btnRect.bottom + 12 + scrollY; // 若上方空間不足，顯示在下方
+
+  mobileBox.style.left = `${left}px`;
+  mobileBox.style.top = `${top}px`;
+}
+
+function toggleFortuneBox(event) {
+  const mobileBox = document.getElementById("mobile-fortune-box");
   mobileBox.classList.toggle("hidden");
-  
-  // If showing the box, position it near the floating button
   if (!mobileBox.classList.contains("hidden")) {
-    // Get button position
-    const btnRect = floatingBtn.getBoundingClientRect();
-    const scrollY = window.scrollY || window.pageYOffset;
-    const scrollX = window.scrollX || window.pageXOffset;
-    const boxWidth = mobileBox.offsetWidth || 320;
-    const boxHeight = mobileBox.offsetHeight || 200;
-    // 計算浮動窗的 left/top 讓它在浮動按鈕上方居中
-    const left = btnRect.left + btnRect.width / 2 - boxWidth / 2 + scrollX;
-    const top = btnRect.top - boxHeight - 12 + scrollY; // 12px 間距
-    mobileBox.style.left = `${left}px`;
-    mobileBox.style.top = `${top}px`;
+    positionMobileFortuneBox();
   }
 }
+
+window.addEventListener('scroll', positionMobileFortuneBox);
+window.addEventListener('resize', positionMobileFortuneBox);
 
 // Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
