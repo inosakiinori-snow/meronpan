@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
   <head>
@@ -469,7 +468,7 @@ body * {
 
 /* 📦 百寶屋彈窗樣式 */
 .mobile-fortune-box {
-  position: fixed;
+  position: absolute;
   /* bottom and right will be set dynamically by JavaScript */
   width: 85vw;
   max-width: 320px;
@@ -973,14 +972,15 @@ function toggleFortuneBox(event) {
   if (!mobileBox.classList.contains("hidden")) {
     // Get button position
     const btnRect = floatingBtn.getBoundingClientRect();
-    
-    // Calculate position (above the button)
-    const boxWidth = mobileBox.offsetWidth || 320; // Default if not yet rendered
-    const boxHeight = mobileBox.offsetHeight || 200; // Default if not yet rendered
-    
-    // Position the box above the floating button
-    mobileBox.style.bottom = (window.innerHeight - btnRect.top + 20) + 'px';
-    mobileBox.style.right = (window.innerWidth - (btnRect.left + btnRect.width/2 + boxWidth/2)) + 'px';
+    const scrollY = window.scrollY || window.pageYOffset;
+    const scrollX = window.scrollX || window.pageXOffset;
+    const boxWidth = mobileBox.offsetWidth || 320;
+    const boxHeight = mobileBox.offsetHeight || 200;
+    // 計算浮動窗的 left/top 讓它在浮動按鈕上方居中
+    const left = btnRect.left + btnRect.width / 2 - boxWidth / 2 + scrollX;
+    const top = btnRect.top - boxHeight - 12 + scrollY; // 12px 間距
+    mobileBox.style.left = `${left}px`;
+    mobileBox.style.top = `${top}px`;
   }
 }
 
