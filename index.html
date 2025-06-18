@@ -968,14 +968,14 @@ function positionMobileFortuneBox() {
   const boxWidth = mobileBox.offsetWidth || 320;
   const boxHeight = mobileBox.offsetHeight || 200;
 
-  // 預設顯示在按鈕正上方居中
-  let left = btnRect.left + btnRect.width / 2 - boxWidth / 2 + scrollX;
+  // 以浮動標左上角為基準
+  let left = btnRect.left + scrollX;
   let top = btnRect.top - boxHeight - 12 + scrollY; // 12px 間距
 
-  // 邊界檢查，避免超出視窗
-  if (left < 8) left = 8;
+  // 邊界檢查
+  if (top < 8) top = btnRect.bottom + 12 + scrollY;
   if (left + boxWidth > window.innerWidth) left = window.innerWidth - boxWidth - 8;
-  if (top < 8) top = btnRect.bottom + 12 + scrollY; // 若上方空間不足，顯示在下方
+  if (left < 8) left = 8;
 
   mobileBox.style.left = `${left}px`;
   mobileBox.style.top = `${top}px`;
