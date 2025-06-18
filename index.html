@@ -448,20 +448,23 @@ body * {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  font-size: 28px;
-  background: #fff;
+  font-size: 32px;
+  background: transparent;
   border-radius: 50%;
-  padding: 12px 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
   z-index: 9999;
   cursor: pointer;
-  animation: pulse 2s infinite;
+  animation: float 3s infinite;
+  text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
-  50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
-  100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(5deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(4px) rotate(-5deg); }
+  100% { transform: translateY(0) rotate(0deg); }
 }
 
 /* 📦 百寶屋彈窗樣式 */
@@ -867,57 +870,90 @@ function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
 
-  // Get elements for both desktop and mobile
-  const box = document.getElementById("fortune-box");
-  const textEl = document.getElementById("fortune-text");
-  
   // Check if we're on mobile
   const isMobile = window.innerWidth < 768;
-  const mobileBox = document.getElementById("mobile-fortune-box");
-  const mobileTextEl = document.getElementById("mobile-fortune-text");
-
-  // Select which element to use based on device
-  const activeTextEl = isMobile ? mobileTextEl : textEl;
   
-  // Generate fortune
-  const isRare = Math.random() < 0.05;
-  const fortune = isRare
-    ? rareFortune
-    : fortunes[Math.floor(Math.random() * fortunes.length)];
-
-  // Show appropriate container
   if (isMobile) {
+    // For mobile, use mobile elements
+    const mobileBox = document.getElementById("mobile-fortune-box");
+    const mobileTextEl = document.getElementById("mobile-fortune-text");
+    
+    // Generate fortune
+    const isRare = Math.random() < 0.05;
+    const fortune = isRare
+      ? rareFortune
+      : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    // Show mobile container
     mobileBox.classList.remove("hidden");
-  } else {
-    box.classList.remove("hidden");
-  }
-  
-  // Reset text element
-  activeTextEl.textContent = "";
-  activeTextEl.classList.remove("text-glow-rainbow");
-  activeTextEl.classList.remove("blink-red");
-  
-  // Apply special styling for special fortunes
-  if (fortune.startsWith("💀 大凶")) {
-    void activeTextEl.offsetWidth;
-    activeTextEl.classList.add("blink-red");
-  }
-
-  if (isRare) {
-    activeTextEl.classList.add("text-glow-rainbow");
-  }
-
-  // Animated text display
-  const chars = Array.from(fortune);
-  let i = 0;
-  const interval = setInterval(() => {
-    activeTextEl.textContent += chars[i];
-    i++;
-    if (i >= chars.length) {
-      clearInterval(interval);
-      isDrawing = false;
+    
+    // Reset text element
+    mobileTextEl.textContent = "";
+    mobileTextEl.classList.remove("text-glow-rainbow");
+    mobileTextEl.classList.remove("blink-red");
+    
+    // Apply special styling for special fortunes
+    if (fortune.startsWith("💀 大凶")) {
+      void mobileTextEl.offsetWidth;
+      mobileTextEl.classList.add("blink-red");
     }
-  }, 75);
+
+    if (isRare) {
+      mobileTextEl.classList.add("text-glow-rainbow");
+    }
+
+    // Animated text display for mobile
+    const chars = Array.from(fortune);
+    let i = 0;
+    const interval = setInterval(() => {
+      mobileTextEl.textContent += chars[i];
+      i++;
+      if (i >= chars.length) {
+        clearInterval(interval);
+        isDrawing = false;
+      }
+    }, 75);
+  } else {
+    // For desktop, use desktop elements
+    const box = document.getElementById("fortune-box");
+    const textEl = document.getElementById("fortune-text");
+    
+    // Generate fortune
+    const isRare = Math.random() < 0.05;
+    const fortune = isRare
+      ? rareFortune
+      : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    // Show desktop container
+    box.classList.remove("hidden");
+    
+    // Reset text element
+    textEl.textContent = "";
+    textEl.classList.remove("text-glow-rainbow");
+    textEl.classList.remove("blink-red");
+    
+    // Apply special styling for special fortunes
+    if (fortune.startsWith("💀 大凶")) {
+      void textEl.offsetWidth;
+      textEl.classList.add("blink-red");
+    }
+
+    if (isRare) {
+      textEl.classList.add("text-glow-rainbow");
+    }
+
+    // Animated text display for desktop
+    const chars = Array.from(fortune);
+    let i = 0;
+    const interval = setInterval(() => {
+      textEl.textContent += chars[i];
+      i++;
+      if (i >= chars.length) {
+        clearInterval(interval);
+        isDrawing = false;
+      }
+    }, 75);
+  }
 }
 
 // Function to toggle mobile fortune box
@@ -932,11 +968,17 @@ document.addEventListener('DOMContentLoaded', function() {
   if (window.innerWidth < 768) {
     const floatingBtn = document.createElement('div');
     floatingBtn.className = 'floating-btn';
-    floatingBtn.innerHTML = '🎲';
+    floatingBtn.innerHTML = '🎇';
     floatingBtn.onclick = function() {
       toggleFortuneBox();
     };
     document.body.appendChild(floatingBtn);
+    
+    // Hide desktop fortune box on mobile
+    const desktopFortuneContainer = document.querySelector('.fixed.top-\[160px\].left-\[48px\]');
+    if (desktopFortuneContainer) {
+      desktopFortuneContainer.style.display = 'none';
+    }
   }
 });
 
@@ -945,10 +987,16 @@ window.addEventListener('resize', function() {
   const isMobile = window.innerWidth < 768;
   const floatingBtn = document.querySelector('.floating-btn');
   const mobileBox = document.getElementById('mobile-fortune-box');
+  const desktopFortuneContainer = document.querySelector('.fixed.top-\[160px\].left-\[48px\]');
   
   // Hide mobile fortune box when switching to desktop
   if (!isMobile && mobileBox && !mobileBox.classList.contains('hidden')) {
     mobileBox.classList.add('hidden');
+  }
+  
+  // Show/hide desktop fortune container based on device
+  if (desktopFortuneContainer) {
+    desktopFortuneContainer.style.display = isMobile ? 'none' : 'block';
   }
   
   // Remove floating button on desktop or add it on mobile if it doesn't exist
@@ -957,7 +1005,7 @@ window.addEventListener('resize', function() {
   } else if (isMobile && !floatingBtn) {
     const newFloatingBtn = document.createElement('div');
     newFloatingBtn.className = 'floating-btn';
-    newFloatingBtn.innerHTML = '🎲';
+    newFloatingBtn.innerHTML = '🎇';
     newFloatingBtn.onclick = function() {
       toggleFortuneBox();
     };
