@@ -455,6 +455,13 @@ body * {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   cursor: pointer;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+  100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
 }
 
 /* 📦 百寶屋彈窗樣式 */
@@ -475,6 +482,24 @@ body * {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* 百寶屋按鈕樣式 */
+.mobile-fortune-box button {
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-fortune-box button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 
@@ -842,32 +867,51 @@ function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
 
+  // Get elements for both desktop and mobile
   const box = document.getElementById("fortune-box");
   const textEl = document.getElementById("fortune-text");
+  
+  // Check if we're on mobile
+  const isMobile = window.innerWidth < 768;
+  const mobileBox = document.getElementById("mobile-fortune-box");
+  const mobileTextEl = document.getElementById("mobile-fortune-text");
 
- const isRare = Math.random() < 0.05;
+  // Select which element to use based on device
+  const activeTextEl = isMobile ? mobileTextEl : textEl;
+  
+  // Generate fortune
+  const isRare = Math.random() < 0.05;
   const fortune = isRare
     ? rareFortune
     : fortunes[Math.floor(Math.random() * fortunes.length)];
 
-  box.classList.remove("hidden");
-  textEl.textContent = "";
-  textEl.classList.remove("text-glow-rainbow");
-textEl.classList.remove("blink-red");
-if (fortune.startsWith("💀 大凶")) {
-  void textEl.offsetWidth;
-  textEl.classList.add("blink-red");
-}
-
-
-  if (isRare) {
-    textEl.classList.add("text-glow-rainbow");
+  // Show appropriate container
+  if (isMobile) {
+    mobileBox.classList.remove("hidden");
+  } else {
+    box.classList.remove("hidden");
+  }
+  
+  // Reset text element
+  activeTextEl.textContent = "";
+  activeTextEl.classList.remove("text-glow-rainbow");
+  activeTextEl.classList.remove("blink-red");
+  
+  // Apply special styling for special fortunes
+  if (fortune.startsWith("💀 大凶")) {
+    void activeTextEl.offsetWidth;
+    activeTextEl.classList.add("blink-red");
   }
 
+  if (isRare) {
+    activeTextEl.classList.add("text-glow-rainbow");
+  }
+
+  // Animated text display
   const chars = Array.from(fortune);
   let i = 0;
   const interval = setInterval(() => {
-    textEl.textContent += chars[i];
+    activeTextEl.textContent += chars[i];
     i++;
     if (i >= chars.length) {
       clearInterval(interval);
@@ -876,24 +920,50 @@ if (fortune.startsWith("💀 大凶")) {
   }, 75);
 }
 
-function drawFortune() {
-  const fortunes = [
-    "🌟 大吉\n今天適合展開新冒險，\n請相信你的直覺。",
-    "✨ 中吉\n事情會一一解開，\n心情慢慢轉晴。",
-    "🍵 小吉\n平穩的一天，適合耍廢。",
-    "🌘 末吉\n煩悶即將過去，是轉機的開始。",
-    "🌑 凶\n心浮氣躁，請靜下心來。",
-    "💀 大凶\n注意言語與行動，靜靜保平安。",
-  ];
-
-  const rareFortune = "🌈 特別吉\n命運女神今天特別罩你！買周邊抽限量！";
-
-  const isRare = Math.random() < 0.05;
-  const selected = isRare ? rareFortune : fortunes[Math.floor(Math.random() * fortunes.length)];
-
-  const resultEl = document.getElementById("fortune-result");
-  resultEl.textContent = selected;
+// Function to toggle mobile fortune box
+function toggleFortuneBox() {
+  const mobileBox = document.getElementById("mobile-fortune-box");
+  mobileBox.classList.toggle("hidden");
 }
+
+// Add a mobile floating button for fortune drawing
+document.addEventListener('DOMContentLoaded', function() {
+  // Only add the floating button on mobile devices
+  if (window.innerWidth < 768) {
+    const floatingBtn = document.createElement('div');
+    floatingBtn.className = 'floating-btn';
+    floatingBtn.innerHTML = '🎲';
+    floatingBtn.onclick = function() {
+      toggleFortuneBox();
+    };
+    document.body.appendChild(floatingBtn);
+  }
+});
+
+// Handle window resize events to show/hide mobile elements appropriately
+window.addEventListener('resize', function() {
+  const isMobile = window.innerWidth < 768;
+  const floatingBtn = document.querySelector('.floating-btn');
+  const mobileBox = document.getElementById('mobile-fortune-box');
+  
+  // Hide mobile fortune box when switching to desktop
+  if (!isMobile && mobileBox && !mobileBox.classList.contains('hidden')) {
+    mobileBox.classList.add('hidden');
+  }
+  
+  // Remove floating button on desktop or add it on mobile if it doesn't exist
+  if (!isMobile && floatingBtn) {
+    floatingBtn.remove();
+  } else if (isMobile && !floatingBtn) {
+    const newFloatingBtn = document.createElement('div');
+    newFloatingBtn.className = 'floating-btn';
+    newFloatingBtn.innerHTML = '🎲';
+    newFloatingBtn.onclick = function() {
+      toggleFortuneBox();
+    };
+    document.body.appendChild(newFloatingBtn);
+  }
+});
 
 
 </script>
@@ -928,13 +998,13 @@ function drawFortune() {
       純屬娛樂性質，別太在意結果哦！
     </p>
 
-    <!-- ✅ 使用正確的手機版函式 -->
-   <button onclick="drawFortuneDesktop()">今日籤詩</button>
+    <!-- 使用正確的手機版函式 -->
+   <button onclick="drawFortuneDesktop()" class="w-full py-2 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">今日籤詩</button>
 
-    <!-- ✅ 手機籤詩顯示區 -->
-    <div id="fortune-result" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide"></div>
+    <!-- 手機籤詩顯示區 -->
+    <div id="mobile-fortune-text" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide"></div>
 
-    <button onclick="toggleFortuneBox()" style="margin-top: 0.5rem;">❌ 關閉</button>
+    <button onclick="document.getElementById('mobile-fortune-box').classList.add('hidden')" class="w-full mt-3 py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">❌ 關閉</button>
   </div>
 </div>
 
