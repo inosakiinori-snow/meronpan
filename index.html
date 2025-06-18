@@ -19,9 +19,9 @@
   本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
   純屬娛樂性質，別太在意結果哦！
 </div>
-  <button onclick="drawFortune()" class="w-full py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
-    今日籤詩
-  </button>
+<button onclick="drawFortuneDesktop()" class="w-full py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
+  今日籤詩
+</button>
   <div id="fortune-box" class="hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-sm text-yellow-100 font-medium shadow-md ring-1 ring-yellow-400/10 animate-fadein">
     <div id="fortune-text" class="whitespace-pre-line leading-relaxed tracking-wide"></div>
 </div>
@@ -397,17 +397,6 @@ body * {
 }
 
 @media (max-width: 768px) {
-  /* 📌 百寶屋：不再固定在畫面上，會跟著頁面滑動 */
-  .fixed.z-\[9999\] {
-    position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    margin: 1.5rem auto 1rem;
-    z-index: auto !important;
-  }
-
   /* 頭像縮小 */
   .avatar-img {
     width: 96px !important;
@@ -453,6 +442,41 @@ body * {
     height: auto;
   }
 }
+
+/* 📱 手機版浮動按鈕樣式 */
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 28px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  cursor: pointer;
+}
+
+/* 📦 百寶屋彈窗樣式 */
+.mobile-fortune-box {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 85vw;
+  max-width: 320px;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mobile-fortune-box.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 
  </style>
@@ -814,7 +838,7 @@ const rareFortune = `🌈 特別吉
 所有願望都有機會實現（包括吃到限量周邊）。
 —— 推薦：今天的你適合大膽嘗試新事物，買周邊也要買最好的！`;
 
-function drawFortune() {
+function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
 
@@ -852,6 +876,26 @@ if (fortune.startsWith("💀 大凶")) {
   }, 75);
 }
 
+function drawFortune() {
+  const fortunes = [
+    "🌟 大吉\n今天適合展開新冒險，\n請相信你的直覺。",
+    "✨ 中吉\n事情會一一解開，\n心情慢慢轉晴。",
+    "🍵 小吉\n平穩的一天，適合耍廢。",
+    "🌘 末吉\n煩悶即將過去，是轉機的開始。",
+    "🌑 凶\n心浮氣躁，請靜下心來。",
+    "💀 大凶\n注意言語與行動，靜靜保平安。",
+  ];
+
+  const rareFortune = "🌈 特別吉\n命運女神今天特別罩你！買周邊抽限量！";
+
+  const isRare = Math.random() < 0.05;
+  const selected = isRare ? rareFortune : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+  const resultEl = document.getElementById("fortune-result");
+  resultEl.textContent = selected;
+}
+
+
 </script>
 
 <footer class="relative mt-20 mb-10 text-center text-white/60 text-sm font-light">
@@ -873,4 +917,26 @@ if (fortune.startsWith("💀 大凶")) {
   </div>
 </footer>
   </body>
+
+<!-- 📦 百寶屋彈出卡片 -->
+<div id="mobile-fortune-box" class="mobile-fortune-box hidden">
+  <div class="nebula-soft-card">
+    <h2 style="color: #ffd700;">雪球的百寶屋</h2>
+    <p>抽個籤玩玩，說不定會抽到隱藏籤喔！</p>
+    <p>
+      <span style="color: #ffcc33;">本抽籤由 菠蘿法師 提供，</span><br>
+      純屬娛樂性質，別太在意結果哦！
+    </p>
+
+    <!-- ✅ 使用正確的手機版函式 -->
+   <button onclick="drawFortuneDesktop()">今日籤詩</button>
+
+    <!-- ✅ 手機籤詩顯示區 -->
+    <div id="fortune-result" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide"></div>
+
+    <button onclick="toggleFortuneBox()" style="margin-top: 0.5rem;">❌ 關閉</button>
+  </div>
+</div>
+
+
 </html>
