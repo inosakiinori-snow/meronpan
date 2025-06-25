@@ -967,17 +967,21 @@ function positionMobileFortuneBox() {
   const boxWidth = mobileBox.offsetWidth || 320;
   const boxHeight = mobileBox.offsetHeight || 200;
 
-  // 根據浮動按鈕的位置設定百寶屋位置（在按鈕的正上方）
   let left = btnRect.left - (boxWidth / 2) + (btnRect.width / 2);
-  let top = btnRect.top - boxHeight - 10; // 放在按鈕上方 10px
+  let top = btnRect.top - boxHeight - 10;
 
-  // 確保不超出視窗邊緣
   if (left < 10) left = 10;
   if (left + boxWidth > window.innerWidth - 10) left = window.innerWidth - boxWidth - 10;
-  if (top < 10) {
-    // 如果上方空間不足，改為顯示在按鈕下方
-    top = btnRect.bottom + 10;
-  }
+  if (top < 10) top = btnRect.bottom + 10;
+
+  // ✅ 確保是 fixed
+  mobileBox.style.position = 'fixed';
+  mobileBox.style.left = `${left}px`;
+  mobileBox.style.top = `${top}px`;
+
+  // ✅ 加這行觀察
+  console.log(`定位中：left=${left}px, top=${top}px`);
+}
 
   // 設定位置
   mobileBox.style.position = 'fixed';
