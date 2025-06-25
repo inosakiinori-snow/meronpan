@@ -448,14 +448,15 @@ body * {
   bottom: 20px;
   right: 20px;
   font-size: 32px;
-  background: transparent;
+  background-color: rgba(255, 255, 255, 0.1); /* ✅ 背景不要透明 */
   border-radius: 50%;
   padding: 12px;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  z-index: 9999;
+  z-index: 9999; /* ✅ 確保比 nebula 卡片與 trail 還高 */
   cursor: pointer;
   animation: float 3s infinite;
   text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
+  color: white; /* ✅ 避免被背景吃掉 */
 }
 
 @keyframes float {
@@ -577,6 +578,52 @@ setInterval(createBread, 2000);
 
 
        launchRandomStar();
+
+
+function positionMobileFortuneBox() {
+  const mobileBox = document.getElementById("mobile-fortune-box");
+  const floatingBtn = document.querySelector(".floating-btn");
+  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
+
+  const btnRect = floatingBtn.getBoundingClientRect();
+  const boxWidth = mobileBox.offsetWidth || 320;
+  const boxHeight = mobileBox.offsetHeight || 200;
+
+  let left = btnRect.left + (btnRect.width / 2) - (boxWidth / 2);
+  let top = btnRect.top - boxHeight - 10;
+
+  if (left < 10) left = 10;
+  if (left + boxWidth > window.innerWidth - 10) left = window.innerWidth - boxWidth - 10;
+  if (top < 10) top = btnRect.bottom + 10;
+
+  mobileBox.style.position = "fixed";
+  mobileBox.style.left = `${left}px`;
+  mobileBox.style.top = `${top}px`;
+}
+
+function continuouslyFollowButton() {
+  positionMobileFortuneBox();
+  followBtnAnimationFrame = requestAnimationFrame(continuouslyFollowButton);
+}
+
+function stopFollowingButton() {
+  cancelAnimationFrame(followBtnAnimationFrame);
+  followBtnAnimationFrame = null;
+}
+
+function toggleFortuneBox() {
+  const mobileBox = document.getElementById("mobile-fortune-box");
+  const isHidden = mobileBox.classList.contains("hidden");
+  mobileBox.classList.toggle("hidden");
+
+  if (isHidden) {
+    positionMobileFortuneBox();
+    continuouslyFollowButton();
+  } else {
+    stopFollowingButton();
+  }
+}
+
     </script>
 
     <div class="fixed inset-0 overflow-y-scroll flex flex-col items-center justify-start px-4 py-12 space-y-12 z-10">
@@ -1122,6 +1169,9 @@ window.addEventListener('resize', function() {
     <div id="mobile-fortune-text" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide"></div>
 
     <button onclick="document.getElementById('mobile-fortune-box').classList.add('hidden')" class="w-full mt-3 py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">❌ 關閉</button>
+
+    let followBtnAnimationFrame = null;
+
   </div>
 </div>
 
