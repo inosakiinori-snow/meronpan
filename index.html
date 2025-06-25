@@ -468,7 +468,7 @@ body * {
 
 /* 📦 百寶屋彈窗樣式 */
 .mobile-fortune-box {
-  position: absolute;
+  position: fixed;
   width: 85vw;
   max-width: 320px;
   z-index: 9999;
@@ -477,6 +477,8 @@ body * {
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  right: 20px;
+  bottom: 80px;
 }
 
 .mobile-fortune-box.hidden {
@@ -966,15 +968,15 @@ function positionMobileFortuneBox() {
   const boxWidth = mobileBox.offsetWidth || 320;
   const boxHeight = mobileBox.offsetHeight || 200;
 
-  // 以浮動標左上角為基準（fixed 元素，不加 scrollX/scrollY）
-  let left = btnRect.left;
-  let top = btnRect.top - boxHeight - 12; // 12px 間距
+  // 設定固定位置，右下角的按鈕，選單從右下角算起
+  let left = window.innerWidth - boxWidth - 20; // 距離右邊 20px
+  let top = window.innerHeight - boxHeight - btnRect.height - 30; // 位置在浮動按鈕上方，間距 30px
 
-  // 邊界檢查
-  if (top < 8) top = btnRect.bottom + 12;
-  if (left + boxWidth > window.innerWidth) left = window.innerWidth - boxWidth - 8;
+  // 確保視窗內顯示
+  if (top < 8) top = 8;
   if (left < 8) left = 8;
 
+  mobileBox.style.position = 'fixed'; // 確保使用固定位置
   mobileBox.style.left = `${left}px`;
   mobileBox.style.top = `${top}px`;
 }
@@ -982,13 +984,10 @@ function positionMobileFortuneBox() {
 function toggleFortuneBox(event) {
   const mobileBox = document.getElementById("mobile-fortune-box");
   mobileBox.classList.toggle("hidden");
-  if (!mobileBox.classList.contains("hidden")) {
-    positionMobileFortuneBox();
-  }
+  // No need to reposition since we're using fixed positioning in CSS
 }
 
-window.addEventListener('scroll', positionMobileFortuneBox);
-window.addEventListener('resize', positionMobileFortuneBox);
+// No need for scroll/resize events with fixed positioning
 
 // Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
