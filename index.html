@@ -1002,8 +1002,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     document.body.appendChild(floatingBtn);
     
-    // 立即設置事件監聽器
-    window.addEventListener('scroll', positionMobileFortuneBox, { passive: true });
+    // 監聽正確的滾動容器
+    const scrollContainer = document.querySelector('.overflow-y-scroll');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', positionMobileFortuneBox, { passive: true });
+    }
     window.addEventListener('resize', positionMobileFortuneBox);
     
     // Ensure desktop fortune box is hidden on mobile
