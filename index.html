@@ -473,11 +473,9 @@ body * {
   max-width: 320px;
   z-index: 9999;
   animation: fadeIn 0.3s ease-out;
-  /* 移除背景、邊框、柔霧，讓內部 .nebula-soft-card 處理 */
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  /* Position will be set dynamically via JavaScript */
 }
 
 .mobile-fortune-box.hidden {
@@ -996,9 +994,9 @@ function toggleFortuneBox(event) {
   }
 }
 
-// Add event listeners to keep the fortune box positioned correctly when scrolling or resizing
 window.addEventListener('scroll', positionMobileFortuneBox);
 window.addEventListener('resize', positionMobileFortuneBox);
+setInterval(positionMobileFortuneBox, 200);
 
 // Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
