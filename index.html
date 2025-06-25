@@ -1003,11 +1003,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(floatingBtn);
     
     // 立即設置事件監聽器
-    window.addEventListener('scroll', positionMobileFortuneBox);
+    window.addEventListener('scroll', positionMobileFortuneBox, { passive: true });
     window.addEventListener('resize', positionMobileFortuneBox);
-    
-    // 每 100ms 檢查一次位置（更頻繁）
-    setInterval(positionMobileFortuneBox, 100);
     
     // Ensure desktop fortune box is hidden on mobile
     const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
@@ -1053,7 +1050,6 @@ window.addEventListener('resize', function() {
     // 重新設置事件監聽器
     window.addEventListener('scroll', positionMobileFortuneBox);
     window.addEventListener('resize', positionMobileFortuneBox);
-    setInterval(positionMobileFortuneBox, 200);
   }
 });
 
