@@ -444,7 +444,7 @@ body * {
 
 /* 📱 手機版浮動按鈕樣式 */
 .floating-btn {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 20px;
   font-size: 32px;
@@ -458,9 +458,8 @@ body * {
   text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
 }
 
-/* 📦 百寶屋彈窗樣式 */
 .mobile-fortune-box {
-  position: absolute;
+  position: fixed;
   width: 85vw;
   max-width: 320px;
   z-index: 9999;
@@ -953,11 +952,9 @@ function positionMobileFortuneBox() {
   const floatingBtn = document.querySelector('.floating-btn');
   if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
 
-  // 取得浮動標的 right/bottom
   const btnRect = floatingBtn.getBoundingClientRect();
   const boxWidth = Math.min(320, window.innerWidth * 0.85);
 
-  // 直接用 right/bottom 定位
   mobileBox.style.position = 'fixed';
   mobileBox.style.right = '20px';
   mobileBox.style.bottom = (btnRect.height + 16) + 'px'; // 16px 間距
@@ -999,16 +996,9 @@ document.addEventListener('DOMContentLoaded', function() {
     floatingBtn.onclick = function(event) {
       toggleFortuneBox(event);
     };
-    // 將浮動標插入到 scrollContainer
-    const scrollContainer = document.querySelector('.overflow-y-scroll');
-    if (scrollContainer) {
-      scrollContainer.appendChild(floatingBtn);
-    }
+    // 直接加到 body
+    document.body.appendChild(floatingBtn);
     
-    // 監聽正確的滾動容器
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', positionMobileFortuneBox, { passive: true });
-    }
     window.addEventListener('resize', positionMobileFortuneBox);
     
     // Ensure desktop fortune box is hidden on mobile
@@ -1058,12 +1048,11 @@ window.addEventListener('resize', function() {
   }
 });
 
-// 將百寶箱彈窗移到 scrollContainer 內
+// 將百寶箱彈窗移回 body
 window.addEventListener('DOMContentLoaded', function() {
-  const scrollContainer = document.querySelector('.overflow-y-scroll');
   const mobileBox = document.getElementById('mobile-fortune-box');
-  if (scrollContainer && mobileBox && mobileBox.parentNode !== scrollContainer) {
-    scrollContainer.appendChild(mobileBox);
+  if (mobileBox && mobileBox.parentNode !== document.body) {
+    document.body.appendChild(mobileBox);
   }
 });
 
