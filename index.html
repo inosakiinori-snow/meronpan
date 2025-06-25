@@ -985,11 +985,32 @@ function positionMobileFortuneBox() {
   mobileBox.style.top = `${top}px`;
 }
 
+let followBtnAnimationFrame = null;
+
+function continuouslyFollowButton() {
+  positionMobileFortuneBox(); // 每幀更新位置
+  followBtnAnimationFrame = requestAnimationFrame(continuouslyFollowButton);
+}
+
+function stopFollowingButton() {
+  if (followBtnAnimationFrame) {
+    cancelAnimationFrame(followBtnAnimationFrame);
+    followBtnAnimationFrame = null;
+  }
+}
+
 function toggleFortuneBox(event) {
   const mobileBox = document.getElementById("mobile-fortune-box");
+  const isHidden = mobileBox.classList.contains("hidden");
   mobileBox.classList.toggle("hidden");
-  if (!mobileBox.classList.contains("hidden")) {
+
+  if (!isHidden) {
+    // 關閉彈窗時停止跟隨
+    stopFollowingButton();
+  } else {
+    // 開啟時立即定位並啟動持續追蹤
     positionMobileFortuneBox();
+    continuouslyFollowButton();
   }
 }
 
