@@ -454,16 +454,9 @@ body * {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
   z-index: 9999;
   cursor: pointer;
-  animation: float 3s infinite;
+  /* 暫時移除動畫 */
+  /* animation: float 3s infinite; */
   text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
-}
-
-@keyframes float {
-  0% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-4px) rotate(5deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  75% { transform: translateY(4px) rotate(-5deg); }
-  100% { transform: translateY(0) rotate(0deg); }
 }
 
 /* 📦 百寶屋彈窗樣式 */
@@ -960,55 +953,47 @@ function positionMobileFortuneBox() {
   const mobileBox = document.getElementById("mobile-fortune-box");
   const floatingBtn = document.querySelector('.floating-btn');
   
+  // 調試用
+  console.log('positionMobileFortuneBox called');
+  console.log('mobileBox:', mobileBox);
+  console.log('floatingBtn:', floatingBtn);
+  
   // 如果浮動窗隱藏或找不到元素，直接返回
   if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) {
+    console.log('Early return');
     return;
   }
 
   // 取得浮動標的位置
   const btnRect = floatingBtn.getBoundingClientRect();
+  console.log('btnRect:', btnRect);
   
-  // 計算浮動窗尺寸
-  const boxWidth = Math.min(320, window.innerWidth * 0.85);
-  const boxHeight = 200; // 預估高度
+  // 簡單定位：直接顯示在浮動標上方
+  const left = btnRect.left;
+  const top = btnRect.top - 250; // 固定高度
   
-  // 預設顯示在浮動標上方
-  let left = btnRect.left;
-  let top = btnRect.top - boxHeight - 10;
-  
-  // 邊界檢查
-  if (left + boxWidth > window.innerWidth - 10) {
-    left = window.innerWidth - boxWidth - 10;
-  }
-  if (left < 10) {
-    left = 10;
-  }
-  if (top < 10) {
-    // 上方空間不足，顯示在下方
-    top = btnRect.bottom + 10;
-    if (top + boxHeight > window.innerHeight - 10) {
-      // 下方也放不下，貼底顯示
-      top = window.innerHeight - boxHeight - 10;
-    }
-  }
+  console.log('Setting position:', { left, top });
   
   // 設置位置
   mobileBox.style.position = 'fixed';
   mobileBox.style.left = left + 'px';
   mobileBox.style.top = top + 'px';
-  mobileBox.style.width = boxWidth + 'px';
+  mobileBox.style.width = '300px';
 }
 
 function toggleFortuneBox(event) {
+  console.log('toggleFortuneBox called');
   const mobileBox = document.getElementById("mobile-fortune-box");
   
   if (mobileBox.classList.contains("hidden")) {
     // 顯示浮動窗
+    console.log('Showing fortune box');
     mobileBox.classList.remove("hidden");
     // 立即定位
-    setTimeout(positionMobileFortuneBox, 10);
+    positionMobileFortuneBox();
   } else {
     // 隱藏浮動窗
+    console.log('Hiding fortune box');
     mobileBox.classList.add("hidden");
   }
 }
