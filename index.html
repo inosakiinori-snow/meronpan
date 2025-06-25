@@ -994,10 +994,6 @@ function toggleFortuneBox(event) {
   }
 }
 
-window.addEventListener('scroll', positionMobileFortuneBox);
-window.addEventListener('resize', positionMobileFortuneBox);
-setInterval(positionMobileFortuneBox, 200);
-
 // Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
   // Add CSS to hide desktop fortune on mobile by default
@@ -1015,6 +1011,11 @@ document.addEventListener('DOMContentLoaded', function() {
       toggleFortuneBox(event);
     };
     document.body.appendChild(floatingBtn);
+    
+    // 在浮動標創建後設置事件監聽器
+    window.addEventListener('scroll', positionMobileFortuneBox);
+    window.addEventListener('resize', positionMobileFortuneBox);
+    setInterval(positionMobileFortuneBox, 200);
     
     // Ensure desktop fortune box is hidden on mobile
     const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
@@ -1056,6 +1057,11 @@ window.addEventListener('resize', function() {
       toggleFortuneBox(event);
     };
     document.body.appendChild(newFloatingBtn);
+    
+    // 重新設置事件監聽器
+    window.addEventListener('scroll', positionMobileFortuneBox);
+    window.addEventListener('resize', positionMobileFortuneBox);
+    setInterval(positionMobileFortuneBox, 200);
   }
 });
 
