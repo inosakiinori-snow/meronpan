@@ -9,7 +9,7 @@
 
     <body>
 <!-- 雪球的百寶屋（強化版） -->
-<div class="fixed top-[160px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
+<div class="fixed top-[80px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
   <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
   雪球的百寶屋
 </h2>
@@ -772,6 +772,22 @@ setInterval(createBread, 2000);
 </div>
 </div>
 
+<!-- 🎂 2025.6.26 初華生誕祭 獨立展示卡 -->
+<section class="mt-20 mb-16">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl text-white text-center border border-white/10">
+      <h3 class="text-xl font-bold text-yellow-300 mb-4">2025.6.26 初華生誕祭</h3>
+      <div class="relative overflow-hidden rounded-xl">
+        <img id="uika-birthday-img" src="uika_2025.jpg" alt="初華生誕祭" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
+        <!-- 左右切換按鈕 -->
+        <button id="uika-birthday-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8592;</button>
+        <button id="uika-birthday-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8594;</button>
+      </div>
+      <div id="uika-birthday-indicators" class="flex justify-center gap-2 mt-3"></div>
+    </div>
+  </div>
+</section>
+
 <!-- 🎮 近期遊戲截圖（獨立展示卡） -->
 <section class="mt-20 mb-16">
   <div class="max-w-2xl mx-auto px-6">
@@ -781,8 +797,8 @@ setInterval(createBread, 2000);
         <img src="BD.png" alt="遊戲截圖" class="w-full h-auto object-contain rounded-xl shadow-lg">
       </div>
       <p class="text-base text-white font-semibold mt-4 tracking-wide">
-  バンドリ日服ID：<span class="font-mono">29730501</span>
-</p>
+        バンドリ日服ID：<span class="font-mono">29730501</span>
+      </p>
     </div>
   </div>
 </section>
@@ -1060,6 +1076,103 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// 初華生誕祭自動偵測圖片數量與副檔名並切換
+window.addEventListener('DOMContentLoaded', function() {
+  const baseName = 'uika_2025';
+  const exts = ['.jpg', '.jpeg', '.png'];
+  const maxTry = 20;
+  const images = [];
+  // 先加封面
+  exts.forEach(ext => images.push(baseName + ext));
+  // 依序嘗試加 01~20
+  for (let i = 1; i <= maxTry; i++) {
+    const num = i.toString().padStart(2, '0');
+    exts.forEach(ext => images.push(`${baseName}_${num}${ext}`));
+  }
+  // 檢查哪些圖片真的存在
+  const validImages = [];
+  let checked = 0;
+  const tryLoad = (idx) => {
+    if (idx >= images.length) {
+      if (validImages.length === 0) validImages.push(baseName + '.jpg'); // 至少有封面
+      setupGallery(validImages);
+      return;
+    }
+    const img = new window.Image();
+    img.onload = function() {
+      validImages.push(images[idx]);
+      checked++;
+      tryLoad(idx + 1);
+    };
+    img.onerror = function() {
+      checked++;
+      tryLoad(idx + 1);
+    };
+    img.src = images[idx];
+  };
+  tryLoad(0);
+
+  function setupGallery(imgList) {
+    let current = 0;
+    const imgEl = document.getElementById('uika-birthday-img');
+    const prevBtn = document.getElementById('uika-birthday-prev');
+    const nextBtn = document.getElementById('uika-birthday-next');
+    const indicators = document.getElementById('uika-birthday-indicators');
+    if (!imgEl || !prevBtn || !nextBtn) return;
+    function update() {
+      imgEl.src = imgList[current];
+      // 指示器
+      indicators.innerHTML = '';
+      imgList.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
+        dot.style.cursor = 'pointer';
+        dot.onclick = () => { current = i; update(); };
+        indicators.appendChild(dot);
+      });
+    }
+    prevBtn.onclick = function() {
+      current = (current - 1 + imgList.length) % imgList.length;
+      update();
+    };
+    nextBtn.onclick = function() {
+      current = (current + 1) % imgList.length;
+      update();
+    };
+    update();
+  }
+});
+// 左下角人物動態插入，永遠最上層且不會跟著內容滾動，含彩蛋互動
+window.addEventListener('DOMContentLoaded', function() {
+  if (!document.getElementById('global-inori-pan')) {
+    const img = document.createElement('img');
+    img.src = 'inori_pan.gif';
+    img.alt = '左下角色';
+    img.id = 'global-inori-pan';
+    img.style.position = 'fixed';
+    img.style.left = '0';
+    img.style.bottom = '0';
+    img.style.margin = '1rem';
+    img.style.width = '192px'; // w-48
+    img.style.height = 'auto';
+    img.style.zIndex = '99999';
+    img.style.pointerEvents = 'auto';
+    img.style.userSelect = 'none';
+    img.className = 'hidden md:block drop-shadow-xl';
+    document.body.appendChild(img);
+    // 彩蛋互動（加鎖）
+    let isSwitching = false;
+    img.addEventListener('click', function() {
+      if (isSwitching) return;
+      isSwitching = true;
+      img.src = 'inori_wai.gif';
+      setTimeout(() => {
+        img.src = 'inori_pan.gif';
+        isSwitching = false;
+      }, 1000);
+    });
+  }
+});
 </script>
 
 <footer class="relative mt-20 mb-10 text-center text-white/60 text-sm font-light">
@@ -1101,13 +1214,5 @@ window.addEventListener('DOMContentLoaded', function() {
     <button onclick="document.getElementById('mobile-fortune-box').classList.add('hidden')" class="w-full mt-3 py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">❌ 關閉</button>
   </div>
 </div>
-
-<!-- 只在桌面版顯示的左下角色 -->
-<img 
-  src="inori_pan.gif" 
-  alt="左下角色"
-  class="hidden md:block fixed left-0 bottom-0 m-4 w-48 h-auto z-50 drop-shadow-xl pointer-events-none"
-  style="user-select: none;"
->
 
 </html>
