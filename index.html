@@ -477,8 +477,7 @@ body * {
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  right: 20px;
-  bottom: 80px;
+  /* Position will be set dynamically via JavaScript */
 }
 
 .mobile-fortune-box.hidden {
@@ -968,15 +967,20 @@ function positionMobileFortuneBox() {
   const boxWidth = mobileBox.offsetWidth || 320;
   const boxHeight = mobileBox.offsetHeight || 200;
 
-  // 設定固定位置，右下角的按鈕，選單從右下角算起
-  let left = window.innerWidth - boxWidth - 20; // 距離右邊 20px
-  let top = window.innerHeight - boxHeight - btnRect.height - 30; // 位置在浮動按鈕上方，間距 30px
+  // 根據浮動按鈕的位置設定百寶屋位置（在按鈕的正上方）
+  let left = btnRect.left - (boxWidth / 2) + (btnRect.width / 2);
+  let top = btnRect.top - boxHeight - 10; // 放在按鈕上方 10px
 
-  // 確保視窗內顯示
-  if (top < 8) top = 8;
-  if (left < 8) left = 8;
+  // 確保不超出視窗邊緣
+  if (left < 10) left = 10;
+  if (left + boxWidth > window.innerWidth - 10) left = window.innerWidth - boxWidth - 10;
+  if (top < 10) {
+    // 如果上方空間不足，改為顯示在按鈕下方
+    top = btnRect.bottom + 10;
+  }
 
-  mobileBox.style.position = 'fixed'; // 確保使用固定位置
+  // 設定位置
+  mobileBox.style.position = 'fixed';
   mobileBox.style.left = `${left}px`;
   mobileBox.style.top = `${top}px`;
 }
@@ -984,10 +988,14 @@ function positionMobileFortuneBox() {
 function toggleFortuneBox(event) {
   const mobileBox = document.getElementById("mobile-fortune-box");
   mobileBox.classList.toggle("hidden");
-  // No need to reposition since we're using fixed positioning in CSS
+  if (!mobileBox.classList.contains("hidden")) {
+    positionMobileFortuneBox();
+  }
 }
 
-// No need for scroll/resize events with fixed positioning
+// Add event listeners to keep the fortune box positioned correctly when scrolling or resizing
+window.addEventListener('scroll', positionMobileFortuneBox);
+window.addEventListener('resize', positionMobileFortuneBox);
 
 // Add a mobile floating button for fortune drawing and handle device-specific display
 document.addEventListener('DOMContentLoaded', function() {
