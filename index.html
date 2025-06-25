@@ -959,38 +959,57 @@ function drawFortuneDesktop() {
 function positionMobileFortuneBox() {
   const mobileBox = document.getElementById("mobile-fortune-box");
   const floatingBtn = document.querySelector('.floating-btn');
-  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
+  
+  // 如果浮動窗隱藏或找不到元素，直接返回
+  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) {
+    return;
+  }
 
+  // 取得浮動標的位置
   const btnRect = floatingBtn.getBoundingClientRect();
-  const boxWidth = mobileBox.offsetWidth || 320;
-  const boxHeight = mobileBox.offsetHeight || 200;
-
-  // 以浮動標左上角為基準
+  
+  // 計算浮動窗尺寸
+  const boxWidth = Math.min(320, window.innerWidth * 0.85);
+  const boxHeight = 200; // 預估高度
+  
+  // 預設顯示在浮動標上方
   let left = btnRect.left;
-  let top = btnRect.top - boxHeight - 10; // 10px 間距
-
+  let top = btnRect.top - boxHeight - 10;
+  
   // 邊界檢查
-  if (left + boxWidth > window.innerWidth - 10) left = window.innerWidth - boxWidth - 10;
-  if (left < 10) left = 10;
+  if (left + boxWidth > window.innerWidth - 10) {
+    left = window.innerWidth - boxWidth - 10;
+  }
+  if (left < 10) {
+    left = 10;
+  }
   if (top < 10) {
-    // 如果上方空間不足，顯示在按鈕下方
+    // 上方空間不足，顯示在下方
     top = btnRect.bottom + 10;
     if (top + boxHeight > window.innerHeight - 10) {
-      // 如果下方也放不下，則盡量貼底
+      // 下方也放不下，貼底顯示
       top = window.innerHeight - boxHeight - 10;
     }
   }
-
+  
+  // 設置位置
   mobileBox.style.position = 'fixed';
-  mobileBox.style.left = `${left}px`;
-  mobileBox.style.top = `${top}px`;
+  mobileBox.style.left = left + 'px';
+  mobileBox.style.top = top + 'px';
+  mobileBox.style.width = boxWidth + 'px';
 }
 
 function toggleFortuneBox(event) {
   const mobileBox = document.getElementById("mobile-fortune-box");
-  mobileBox.classList.toggle("hidden");
-  if (!mobileBox.classList.contains("hidden")) {
-    positionMobileFortuneBox();
+  
+  if (mobileBox.classList.contains("hidden")) {
+    // 顯示浮動窗
+    mobileBox.classList.remove("hidden");
+    // 立即定位
+    setTimeout(positionMobileFortuneBox, 10);
+  } else {
+    // 隱藏浮動窗
+    mobileBox.classList.add("hidden");
   }
 }
 
@@ -1012,10 +1031,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     document.body.appendChild(floatingBtn);
     
-    // 在浮動標創建後設置事件監聽器
+    // 立即設置事件監聽器
     window.addEventListener('scroll', positionMobileFortuneBox);
     window.addEventListener('resize', positionMobileFortuneBox);
-    setInterval(positionMobileFortuneBox, 200);
+    
+    // 每 100ms 檢查一次位置（更頻繁）
+    setInterval(positionMobileFortuneBox, 100);
     
     // Ensure desktop fortune box is hidden on mobile
     const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
