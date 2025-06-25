@@ -444,7 +444,7 @@ body * {
 
 /* 📱 手機版浮動按鈕樣式 */
 .floating-btn {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   right: 20px;
   font-size: 32px;
@@ -454,14 +454,13 @@ body * {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
   z-index: 9999;
   cursor: pointer;
-  /* 暫時移除動畫 */
   /* animation: float 3s infinite; */
   text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
 }
 
 /* 📦 百寶屋彈窗樣式 */
 .mobile-fortune-box {
-  position: fixed;
+  position: absolute;
   width: 85vw;
   max-width: 320px;
   z-index: 9999;
@@ -1000,10 +999,13 @@ document.addEventListener('DOMContentLoaded', function() {
     floatingBtn.onclick = function(event) {
       toggleFortuneBox(event);
     };
-    document.body.appendChild(floatingBtn);
+    // 將浮動標插入到 scrollContainer
+    const scrollContainer = document.querySelector('.overflow-y-scroll');
+    if (scrollContainer) {
+      scrollContainer.appendChild(floatingBtn);
+    }
     
     // 監聽正確的滾動容器
-    const scrollContainer = document.querySelector('.overflow-y-scroll');
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', positionMobileFortuneBox, { passive: true });
     }
@@ -1056,6 +1058,14 @@ window.addEventListener('resize', function() {
   }
 });
 
+// 將百寶箱彈窗移到 scrollContainer 內
+window.addEventListener('DOMContentLoaded', function() {
+  const scrollContainer = document.querySelector('.overflow-y-scroll');
+  const mobileBox = document.getElementById('mobile-fortune-box');
+  if (scrollContainer && mobileBox && mobileBox.parentNode !== scrollContainer) {
+    scrollContainer.appendChild(mobileBox);
+  }
+});
 
 </script>
 
