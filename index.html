@@ -1076,71 +1076,43 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// 初華生誕祭自動偵測圖片數量與副檔名並切換
+// 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
 window.addEventListener('DOMContentLoaded', function() {
-  const baseName = 'uika_2025';
-  const exts = ['.jpg', '.jpeg', '.png'];
-  const maxTry = 20;
-  const images = [];
-  // 先加封面
-  exts.forEach(ext => images.push(baseName + ext));
-  // 依序嘗試加 01~20
-  for (let i = 1; i <= maxTry; i++) {
-    const num = i.toString().padStart(2, '0');
-    exts.forEach(ext => images.push(`${baseName}_${num}${ext}`));
+  const imgList = [
+    'uika_2025.png',
+    'uika_2025_01.png',
+    'uika_2025_02.jpeg',
+    'uika_2025_03.png',
+    'uika_2025_04.png',
+    'uika_2025_05.png'
+  ];
+  let current = 0;
+  const imgEl = document.getElementById('uika-birthday-img');
+  const prevBtn = document.getElementById('uika-birthday-prev');
+  const nextBtn = document.getElementById('uika-birthday-next');
+  const indicators = document.getElementById('uika-birthday-indicators');
+  if (!imgEl || !prevBtn || !nextBtn) return;
+  function update() {
+    imgEl.src = imgList[current];
+    // 指示器
+    indicators.innerHTML = '';
+    imgList.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
+      dot.style.cursor = 'pointer';
+      dot.onclick = () => { current = i; update(); };
+      indicators.appendChild(dot);
+    });
   }
-  // 檢查哪些圖片真的存在
-  const validImages = [];
-  let checked = 0;
-  const tryLoad = (idx) => {
-    if (idx >= images.length) {
-      if (validImages.length === 0) validImages.push(baseName + '.jpg'); // 至少有封面
-      setupGallery(validImages);
-      return;
-    }
-    const img = new window.Image();
-    img.onload = function() {
-      validImages.push(images[idx]);
-      checked++;
-      tryLoad(idx + 1);
-    };
-    img.onerror = function() {
-      checked++;
-      tryLoad(idx + 1);
-    };
-    img.src = images[idx];
-  };
-  tryLoad(0);
-
-  function setupGallery(imgList) {
-    let current = 0;
-    const imgEl = document.getElementById('uika-birthday-img');
-    const prevBtn = document.getElementById('uika-birthday-prev');
-    const nextBtn = document.getElementById('uika-birthday-next');
-    const indicators = document.getElementById('uika-birthday-indicators');
-    if (!imgEl || !prevBtn || !nextBtn) return;
-    function update() {
-      imgEl.src = imgList[current];
-      // 指示器
-      indicators.innerHTML = '';
-      imgList.forEach((_, i) => {
-        const dot = document.createElement('span');
-        dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
-        dot.style.cursor = 'pointer';
-        dot.onclick = () => { current = i; update(); };
-        indicators.appendChild(dot);
-      });
-    }
-    prevBtn.onclick = function() {
-      current = (current - 1 + imgList.length) % imgList.length;
-      update();
-    };
-    nextBtn.onclick = function() {
-      current = (current + 1) % imgList.length;
-      update();
-    };
+  prevBtn.onclick = function() {
+    current = (current - 1 + imgList.length) % imgList.length;
     update();
-  }
+  };
+  nextBtn.onclick = function() {
+    current = (current + 1) % imgList.length;
+    update();
+  };
+  update();
 });
 // 左下角人物動態插入，永遠最上層且不會跟著內容滾動，含彩蛋互動
 window.addEventListener('DOMContentLoaded', function() {
