@@ -952,33 +952,19 @@ function drawFortuneDesktop() {
 function positionMobileFortuneBox() {
   const mobileBox = document.getElementById("mobile-fortune-box");
   const floatingBtn = document.querySelector('.floating-btn');
-  
-  // 調試用
-  console.log('positionMobileFortuneBox called');
-  console.log('mobileBox:', mobileBox);
-  console.log('floatingBtn:', floatingBtn);
-  
-  // 如果浮動窗隱藏或找不到元素，直接返回
-  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) {
-    console.log('Early return');
-    return;
-  }
+  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
 
-  // 取得浮動標的位置
+  // 取得浮動標的 right/bottom
   const btnRect = floatingBtn.getBoundingClientRect();
-  console.log('btnRect:', btnRect);
-  
-  // 簡單定位：直接顯示在浮動標上方
-  const left = btnRect.left;
-  const top = btnRect.top - 250; // 固定高度
-  
-  console.log('Setting position:', { left, top });
-  
-  // 設置位置
+  const boxWidth = Math.min(320, window.innerWidth * 0.85);
+
+  // 直接用 right/bottom 定位
   mobileBox.style.position = 'fixed';
-  mobileBox.style.left = left + 'px';
-  mobileBox.style.top = top + 'px';
-  mobileBox.style.width = '300px';
+  mobileBox.style.right = '20px';
+  mobileBox.style.bottom = (btnRect.height + 16) + 'px'; // 16px 間距
+  mobileBox.style.left = '';
+  mobileBox.style.top = '';
+  mobileBox.style.width = boxWidth + 'px';
 }
 
 function toggleFortuneBox(event) {
