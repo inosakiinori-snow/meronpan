@@ -7,26 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
 
-    <body>
-<!-- 雪球的百寶屋（強化版） -->
-<div class="fixed top-[80px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
-  <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
-  雪球的百寶屋
-</h2>
-<div class="text-sm text-white text-center leading-relaxed mb-4">
-  抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
-  本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
-  純屬娛樂性質，別太在意結果哦！
-</div>
-<button onclick="drawFortuneDesktop()" class="w-full py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
-  今日籤詩
-</button>
-  <div id="fortune-box" class="hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-sm text-yellow-100 font-medium shadow-md ring-1 ring-yellow-400/10 animate-fadein">
-    <div id="fortune-text" class="whitespace-pre-line leading-relaxed tracking-wide"></div>
-</div>
-</div>
-
-<style>
+    <style>
+/* 移除自訂字體設定，恢復預設 */
 
     .avatar-img {
   width: 120px;
@@ -47,6 +29,7 @@
       }
 
       body {
+        font-family: 'Noto Sans TC', 'Noto Sans JP', 'Microsoft JhengHei', 'PingFang TC', 'Meiryo', 'sans-serif';
         background: radial-gradient(ellipse at 50% 100%, #1c1f3f 0%, #0b0c29 60%, #050510 100%);
         background-attachment: fixed;
         overflow: visible;
@@ -520,7 +503,216 @@ body * {
   </head>
 
   <body class="text-white font-sans">
+    <!-- 手機版行事曆浮標按鈕 -->
+    <div id="mobile-calendar-btn" class="fixed top-4 right-4 z-[9999] md:hidden bg-white/10 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow-lg border border-white/20 cursor-pointer hover:bg-white/20 transition" onclick="toggleMobileCalendar()">
+      📅
+    </div>
+
+    <!-- 更淡、更融入背景的現代感月曆元件 -->
+    <div id="calendar-container" class="fixed top-[80px] right-[120px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-4 text-white select-none md:block hidden">
+      <h2 class="text-lg font-semibold text-center mb-2 tracking-wide" style="color: #BB9955;">行事曆</h2>
+      <hr class="border-t border-yellow-200/40 w-4/5 mx-auto mb-3">
+      <div class="flex justify-between items-center mb-3">
+        <button onclick="prevMonth()" class="rounded-full bg-white/10 hover:bg-white/20 text-gray-200 w-8 h-8 flex items-center justify-center transition"><span class="text-lg">&#8592;</span></button>
+        <h3 id="calendar-month-year" class="text-sm font-semibold text-white/80 text-center"></h3>
+        <button onclick="nextMonth()" class="rounded-full bg-white/10 hover:bg-white/20 text-gray-200 w-8 h-8 flex items-center justify-center transition"><span class="text-lg">&#8594;</span></button>
+      </div>
+      <div class="grid grid-cols-7 gap-1 text-center text-xs mb-1 text-white/60">
+        <div>日</div>
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div>六</div>
+      </div>
+      <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center mb-2">
+        <!-- 日期將由 JavaScript 產生 -->
+      </div>
+      <hr class="border-t border-yellow-200/40 w-4/5 mx-auto my-3">
+      <div id="calendar-event" class="text-sm text-white/80 font-normal mt-1"></div>
+    </div>
+
+    <!-- 手機版行事曆卡片 -->
+    <div id="mobile-calendar-container" class="fixed top-16 right-4 z-[9999] w-64 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-3 text-white select-none hidden md:hidden">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-base font-semibold tracking-wide" style="color: #BB9955;">行事曆</h2>
+        <button onclick="toggleMobileCalendar()" class="text-white/70 hover:text-white text-lg">✕</button>
+      </div>
+      <hr class="border-t border-yellow-200/40 w-4/5 mx-auto mb-2">
+      <div class="flex justify-between items-center mb-2">
+        <button onclick="prevMonth()" class="rounded-full bg-white/10 hover:bg-white/20 text-gray-200 w-6 h-6 flex items-center justify-center transition text-sm">&#8592;</button>
+        <h3 id="mobile-calendar-month-year" class="text-xs font-semibold text-white/80 text-center"></h3>
+        <button onclick="nextMonth()" class="rounded-full bg-white/10 hover:bg-white/20 text-gray-200 w-6 h-6 flex items-center justify-center transition text-sm">&#8594;</button>
+      </div>
+      <div class="grid grid-cols-7 gap-1 text-center text-xs mb-1 text-white/60">
+        <div>日</div>
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div>六</div>
+      </div>
+      <div id="mobile-calendar-days" class="grid grid-cols-7 gap-1 text-center mb-2">
+        <!-- 日期將由 JavaScript 產生 -->
+      </div>
+      <hr class="border-t border-yellow-200/40 w-4/5 mx-auto my-2">
+      <div id="mobile-calendar-event" class="text-xs text-white/80 font-normal mt-1"></div>
+    </div>
+
     <script>
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    function initCalendar() {
+      updateCalendar();
+    }
+
+    function updateCalendar() {
+      const monthYearElem = document.getElementById('calendar-month-year');
+      const daysElem = document.getElementById('calendar-days');
+      const eventElem = document.getElementById('calendar-event');
+      const mobileMonthYearElem = document.getElementById('mobile-calendar-month-year');
+      const mobileDaysElem = document.getElementById('mobile-calendar-days');
+      const mobileEventElem = document.getElementById('mobile-calendar-event');
+      
+      const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      const monthYearText = `${currentYear}年 ${monthNames[currentMonth]}`;
+      
+      if (monthYearElem) monthYearElem.textContent = monthYearText;
+      if (mobileMonthYearElem) mobileMonthYearElem.textContent = monthYearText;
+      
+      // 清空日期格子
+      if (daysElem) daysElem.innerHTML = '';
+      if (mobileDaysElem) mobileDaysElem.innerHTML = '';
+      
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // 填充空白格子
+      for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'text-xs p-1 text-white/30';
+        if (daysElem) daysElem.appendChild(emptyDay.cloneNode(true));
+        if (mobileDaysElem) mobileDaysElem.appendChild(emptyDay.cloneNode(true));
+      }
+      
+      const today = new Date();
+      const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+      const currentDay = today.getDate();
+      
+      for (let i = 1; i <= daysInMonth; i++) {
+        const dayElem = document.createElement('div');
+        dayElem.textContent = i;
+        dayElem.className = 'text-xs p-1 rounded-lg transition cursor-pointer text-white/80 hover:bg-white/10 relative';
+        
+        // 今天
+        if (isCurrentMonth && i === currentDay) {
+          dayElem.className += ' border-2 border-yellow-200 bg-white/20 text-yellow-200 font-semibold';
+        }
+        
+        // 2025/8/16, 17, 22, 23, 24 高亮（更淡，數字白色）
+        if (currentYear === 2025 && currentMonth === 7 && (i === 16 || i === 17 || i === 22 || i === 23 || i === 24)) {
+          dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
+        }
+        
+        // 6月生日：13、26 淡紫色高亮，hover 時顯示 emoji
+        if (currentMonth === 5 && (i === 13 || i === 26)) {
+          dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
+          dayElem.onmouseenter = function() {
+            let emoji = i === 13 ? '🎂' : '⭐';
+            let badge = document.createElement('span');
+            badge.textContent = emoji;
+            badge.style.position = 'absolute';
+            badge.style.top = '2px';
+            badge.style.right = '4px';
+            badge.style.fontSize = '1rem';
+            badge.style.pointerEvents = 'none';
+            badge.className = 'birthday-emoji';
+            dayElem.appendChild(badge);
+          };
+          dayElem.onmouseleave = function() {
+            const badge = dayElem.querySelector('.birthday-emoji');
+            if (badge) badge.remove();
+          };
+        }
+        
+        if (daysElem) daysElem.appendChild(dayElem.cloneNode(true));
+        if (mobileDaysElem) mobileDaysElem.appendChild(dayElem.cloneNode(true));
+      }
+      
+      // 事件區塊
+      let eventHTML = '';
+      if (currentYear === 2025 && currentMonth === 7) {
+        eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">預訂參加</div>' +
+          '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>16、17：CWT70台北場</li>' +
+          '<li>22~24：FF45</li>' +
+          '</ul>';
+      } else if (currentMonth === 5) {
+        eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
+          '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>🎂 6/13 我的生日</li>' +
+          '<li>⭐ 6/26 初華的生日</li>' +
+          '</ul>';
+      }
+      
+      if (eventElem) eventElem.innerHTML = eventHTML;
+      if (mobileEventElem) mobileEventElem.innerHTML = eventHTML;
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      updateCalendar();
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      updateCalendar();
+    }
+
+    function toggleMobileCalendar() {
+      const mobileContainer = document.getElementById('mobile-calendar-container');
+      if (mobileContainer.classList.contains('hidden')) {
+        mobileContainer.classList.remove('hidden');
+      } else {
+        mobileContainer.classList.add('hidden');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
+
+    <!-- 雪球的百寶屋（強化版） -->
+    <div class="fixed top-[80px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
+      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
+        雪球的百寶屋
+      </h2>
+      <div class="text-sm text-white text-center leading-relaxed mb-4">
+        抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
+        本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
+        純屬娛樂性質，別太在意結果哦！
+      </div>
+      <button onclick="drawFortuneDesktop()" class="w-full py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
+        今日籤詩
+      </button>
+      <div id="fortune-box" class="hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-sm text-yellow-100 font-medium shadow-md ring-1 ring-yellow-400/10 animate-fadein">
+        <div id="fortune-text" class="whitespace-pre-line leading-relaxed tracking-wide"></div>
+      </div>
+    </div>
+
+    <script>
+
       function createBread() {
   const existing = document.querySelectorAll('.bread-float');
   if (existing.length >= 15) return;  // ✅ 限制麵包數量
@@ -776,6 +968,9 @@ setInterval(createBread, 2000);
     <a href="https://www.plurk.com/snow_mizuki" class="block text-pink-400 underline" target="_blank">
       Plurk：@snow_mizuki
     </a>
+    <img src="PLURK.png" alt="Plurk Logo" style="width:96px; margin-top:4px; display: block; margin-bottom: 8px;" class="align-middle">
+    <br>
+    <p class="text-white/80 text-sm">也有DC，工作比較常用到，如果之後有需要會開放加友或伺服器</p>
   </p>
 </div>
 </div>
@@ -786,7 +981,7 @@ setInterval(createBread, 2000);
     <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl shadow-[0_0_32px_#FFD70080] ring-4 ring-yellow-200/40 text-white text-center border-4 border-yellow-300 relative overflow-visible">
       <h3 class="text-xl font-bold text-yellow-300 mb-4">2025.6.26 初華生誕祭</h3>
       <div class="relative overflow-hidden rounded-xl">
-        <img id="uika-birthday-img" src="uika_2025.jpg" alt="初華生誕祭" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
+        <img id="uika-birthday-img" src="uika_2025.PNG" alt="初華生誕祭" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
         <!-- 左右切換按鈕 -->
         <button id="uika-birthday-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8592;</button>
         <button id="uika-birthday-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8594;</button>
@@ -802,12 +997,12 @@ setInterval(createBread, 2000);
     <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl text-white text-center border border-white/10">
       <h3 class="text-xl font-bold text-yellow-300 mb-4">遊戲ID｜歡迎加友</h3>
       <div class="overflow-hidden rounded-xl">
-        <img src="BD.png" alt="遊戲截圖" class="w-full h-auto object-contain rounded-xl shadow-lg">
+        <img src="BD.png" alt="遊戲截圖" class="w-[480px] max-w-full h-auto object-contain rounded-xl shadow-lg">
         <p class="text-base text-white font-semibold mt-4 tracking-wide">
           バンドリ日服ID：<span class="font-mono">29730501</span>
         </p>
         <hr class="my-4 border-yellow-200/60">
-        <img src="SV2.PNG" alt="遊戲截圖2" class="w-full h-auto object-contain rounded-xl shadow-lg">
+        <img src="SV2.PNG" alt="遊戲截圖2" class="w-[480px] max-w-full h-auto object-contain rounded-xl shadow-lg">
         <p class="text-base text-white font-semibold mt-4 tracking-wide">
           SV2 ID：<span class="font-mono">584797730744</span>
         </p>
@@ -887,7 +1082,7 @@ const fortunes = [
 
 const rareFortune = `🌈 特別吉
 今日氣場超強，命運之神正在幫你加持！
-所有願望都有機會實現（包括吃到限量周邊）。
+所有願望都有機會實現（包括買到限量周邊）。
 —— 推薦：今天的你適合大膽嘗試新事物，買周邊也要買最好的！`;
 
 function drawFortuneDesktop() {
@@ -1097,7 +1292,8 @@ window.addEventListener('DOMContentLoaded', function() {
     'uika_2025_02.jpeg',
     'uika_2025_03.PNG',
     'uika_2025_04.PNG',
-    'uika_2025_05.PNG'
+    'uika_2025_05.PNG',
+    'uika_2025_06.DNG'
   ];
   let current = 0;
   const imgEl = document.getElementById('uika-birthday-img');
@@ -1178,7 +1374,6 @@ window.addEventListener('DOMContentLoaded', function() {
     </span>
   </div>
 </footer>
-  </body>
 
 <!-- 📦 百寶屋彈出卡片 -->
 <div id="mobile-fortune-box" class="mobile-fortune-box hidden">
