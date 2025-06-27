@@ -1442,62 +1442,6 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 
-<!-- 手機版彈窗遮罩 -->
-<div id="mobile-modal-mask" class="fixed inset-0 z-[99998] bg-black/20 hidden md:hidden"></div>
-
-<script>
-// 手機版彈窗互斥顯示，支援遮罩與滑動關閉
-function openMobileModal(which) {
-  document.getElementById('mobile-modal-mask').classList.remove('hidden');
-  if (which === 'calendar') {
-    document.getElementById('mobile-calendar-container').classList.remove('hidden');
-    document.getElementById('mobile-fortune-box').classList.add('hidden');
-  } else {
-    document.getElementById('mobile-fortune-box').classList.remove('hidden');
-    document.getElementById('mobile-calendar-container').classList.add('hidden');
-  }
-}
-function closeMobileModals() {
-  document.getElementById('mobile-modal-mask').classList.add('hidden');
-  document.getElementById('mobile-calendar-container').classList.add('hidden');
-  document.getElementById('mobile-fortune-box').classList.add('hidden');
-}
-document.getElementById('mobile-modal-mask').onclick = closeMobileModals;
-window.addEventListener('touchmove', function() {
-  if (!document.getElementById('mobile-modal-mask').classList.contains('hidden')) {
-    closeMobileModals();
-  }
-}, { passive: true });
-// 工具列按鈕事件
-const toolCalendarBtn = document.getElementById('tool-calendar-btn');
-const toolFortuneBtn = document.getElementById('tool-fortune-btn');
-if (toolCalendarBtn) {
-  toolCalendarBtn.addEventListener('click', function() {
-    openMobileModal('calendar');
-    // 位置調整
-    const cal = document.getElementById('mobile-calendar-container');
-    cal.style.top = '70px';
-    cal.style.left = '50%';
-    cal.style.transform = 'translateX(-50%)';
-  });
-}
-if (toolFortuneBtn) {
-  toolFortuneBtn.addEventListener('click', function() {
-    openMobileModal('fortune');
-    // 位置調整
-    const box = document.getElementById('mobile-fortune-box');
-    box.style.top = '70px';
-    box.style.left = '50%';
-    box.style.transform = 'translateX(-50%)';
-  });
-}
-// 關閉按鈕也要關閉遮罩
-const calCloseBtn = document.querySelector('#mobile-calendar-container .text-lg');
-if (calCloseBtn) calCloseBtn.onclick = closeMobileModals;
-const fortuneCloseBtn = document.querySelector('#mobile-fortune-box .text-lg');
-if (fortuneCloseBtn) fortuneCloseBtn.onclick = closeMobileModals;
-</script>
-
 
 
 </html>
