@@ -428,48 +428,14 @@ body * {
 /* 📱 手機版浮動按鈕樣式 */
 /* 已移除浮動按鈕相關樣式 */
 
-.mobile-fortune-box {
-  position: fixed;
-  width: 85vw;
-  max-width: 320px;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease-out;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-}
-
-.mobile-fortune-box * {
-  pointer-events: auto;
-}
-
-.mobile-fortune-box.hidden {
-  display: none;
-}
+/* 已移除mobile-fortune-box相關樣式 */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 百寶屋按鈕樣式 */
-.mobile-fortune-box button {
-  width: 100%;
-  padding: 8px 0;
-  margin-top: 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.mobile-fortune-box button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
+/* 已移除百寶屋按鈕樣式 */
 
 
 
@@ -491,16 +457,12 @@ body * {
     const toolCalendarBtn = document.getElementById('tool-calendar-btn');
     const toolFortuneBtn = document.getElementById('tool-fortune-btn');
     const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
-    const mobileFortuneBox = document.getElementById('mobile-fortune-box');
     
     // Handle calendar button click
     if (toolCalendarBtn && mobileCalendarContainer) {
       toolCalendarBtn.addEventListener('click', function() {
-        // Show calendar, hide fortune box
+        // Show calendar
         mobileCalendarContainer.classList.remove('hidden');
-        if (mobileFortuneBox) {
-          mobileFortuneBox.classList.add('hidden');
-        }
         
         // Position the calendar popup near the top of the screen
         mobileCalendarContainer.style.top = '70px';
@@ -509,19 +471,16 @@ body * {
       });
     }
     
-    // Handle fortune/toolbox button click
-    if (toolFortuneBtn && mobileFortuneBox) {
+    // Handle fortune/toolbox button click - 已移除浮動彈窗功能
+    if (toolFortuneBtn) {
       toolFortuneBtn.addEventListener('click', function() {
-        // Show fortune box, hide calendar
-        mobileFortuneBox.classList.remove('hidden');
+        // 隱藏行事曆
         if (mobileCalendarContainer) {
           mobileCalendarContainer.classList.add('hidden');
         }
         
-        // Position the fortune box popup near the top of the screen
-        mobileFortuneBox.style.top = '70px';
-        mobileFortuneBox.style.left = '50%';
-        mobileFortuneBox.style.transform = 'translateX(-50%)';
+        // 直接使用桌面版百寶箱功能
+        drawFortuneDesktop();
       });
     }
   });
@@ -1124,99 +1083,46 @@ function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
 
-  // Check if we're on mobile
-  const isMobile = window.innerWidth < 768;
+  // 統一使用桌面版百寶箱
+  const box = document.getElementById("fortune-box");
+  const textEl = document.getElementById("fortune-text");
   
-  if (isMobile) {
-    // For mobile, use mobile elements
-    const mobileBox = document.getElementById("mobile-fortune-box");
-    const mobileTextEl = document.getElementById("mobile-fortune-text");
-    
-    // Generate fortune
-    const isRare = Math.random() < 0.05;
-    const fortune = isRare
-      ? rareFortune
-      : fortunes[Math.floor(Math.random() * fortunes.length)];
+  // Generate fortune
+  const isRare = Math.random() < 0.05;
+  const fortune = isRare
+    ? rareFortune
+    : fortunes[Math.floor(Math.random() * fortunes.length)];
 
-    // Show mobile container
-    mobileBox.classList.remove("hidden");
-    
-    // Reset text element
-    mobileTextEl.textContent = "";
-    mobileTextEl.classList.remove("text-glow-rainbow");
-    mobileTextEl.classList.remove("blink-red");
-    
-    // Apply special styling for special fortunes
-    if (fortune.startsWith("💀 大凶")) {
-      void mobileTextEl.offsetWidth;
-      mobileTextEl.classList.add("blink-red");
-    }
-
-    if (isRare) {
-      mobileTextEl.classList.add("text-glow-rainbow");
-    }
-
-    // Animated text display for mobile
-    const chars = Array.from(fortune);
-    let i = 0;
-    const interval = setInterval(() => {
-      mobileTextEl.textContent += chars[i];
-      i++;
-      if (i >= chars.length) {
-        clearInterval(interval);
-        isDrawing = false;
-      }
-    }, 75);
-  } else {
-    // For desktop, use desktop elements
-    const box = document.getElementById("fortune-box");
-    const textEl = document.getElementById("fortune-text");
-    
-    // Generate fortune
-    const isRare = Math.random() < 0.05;
-    const fortune = isRare
-      ? rareFortune
-      : fortunes[Math.floor(Math.random() * fortunes.length)];
-
-    // Show desktop container
-    box.classList.remove("hidden");
-    
-    // Reset text element
-    textEl.textContent = "";
-    textEl.classList.remove("text-glow-rainbow");
-    textEl.classList.remove("blink-red");
-    
-    // Apply special styling for special fortunes
-    if (fortune.startsWith("💀 大凶")) {
-      void textEl.offsetWidth;
-      textEl.classList.add("blink-red");
-    }
-
-    if (isRare) {
-      textEl.classList.add("text-glow-rainbow");
-    }
-
-    // Animated text display for desktop
-    const chars = Array.from(fortune);
-    let i = 0;
-    const interval = setInterval(() => {
-      textEl.textContent += chars[i];
-      i++;
-      if (i >= chars.length) {
-        clearInterval(interval);
-        isDrawing = false;
-      }
-    }, 75);
+  // Show desktop container
+  box.classList.remove("hidden");
+  
+  // Reset text element
+  textEl.textContent = "";
+  textEl.classList.remove("text-glow-rainbow");
+  textEl.classList.remove("blink-red");
+  
+  // Apply special styling for special fortunes
+  if (fortune.startsWith("💀 大凶")) {
+    void textEl.offsetWidth;
+    textEl.classList.add("blink-red");
   }
+
+  if (isRare) {
+    textEl.classList.add("text-glow-rainbow");
+  }
+
+  // Animated text display for desktop
+  const chars = Array.from(fortune);
+  let i = 0;
+  const interval = setInterval(() => {
+    textEl.textContent += chars[i];
+    i++;
+    if (i >= chars.length) {
+      clearInterval(interval);
+      isDrawing = false;
+    }
+  }, 75);
 }
-
-// 將百寶箱彈窗移回 body
-window.addEventListener('DOMContentLoaded', function() {
-  const mobileBox = document.getElementById('mobile-fortune-box');
-  if (mobileBox && mobileBox.parentNode !== document.body) {
-    document.body.appendChild(mobileBox);
-  }
-});
 
 // 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
 window.addEventListener('DOMContentLoaded', function() {
@@ -1310,24 +1216,7 @@ window.addEventListener('DOMContentLoaded', function() {
 </footer>
 
 <!-- 📦 百寶屋彈出卡片 -->
-<div id="mobile-fortune-box" class="mobile-fortune-box hidden">
-  <div class="nebula-soft-card">
-    <h2 style="color: #ffd700;">雪球的百寶屋</h2>
-    <p>抽個籤玩玩，說不定會抽到隱藏籤喔！</p>
-    <p>
-      <span style="color: #ffcc33;">本抽籤由 菠蘿法師 提供，</span><br>
-      純屬娛樂性質，別太在意結果哦！
-    </p>
-
-    <!-- 使用正確的手機版函式 -->
-   <button onclick="drawFortuneDesktop()" class="w-full py-2 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">今日籤詩</button>
-
-    <!-- 手機籤詩顯示區 -->
-    <div id="mobile-fortune-text" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide"></div>
-
-    <button onclick="document.getElementById('mobile-fortune-box').classList.add('hidden')" class="w-full mt-3 py-1 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">❌ 關閉</button>
-  </div>
-</div>
+<!-- 已移除浮動百寶箱彈窗 -->
 
 
 
