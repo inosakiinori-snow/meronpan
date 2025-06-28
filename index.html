@@ -461,7 +461,6 @@ body * {
     // Handle calendar button click
     if (toolCalendarBtn && mobileCalendarContainer) {
       toolCalendarBtn.addEventListener('click', function() {
-        // 先移除已存在的行事曆彈窗（其實只需隱藏）
         // 顯示行事曆
         mobileCalendarContainer.classList.remove('hidden');
         mobileCalendarContainer.style.top = '70px';
@@ -476,6 +475,10 @@ body * {
         }
         window.addEventListener('touchmove', closeOnTouchMove, { passive: true });
         window.addEventListener('scroll', closeOnTouchMove, { passive: true });
+
+        // 點擊空白處自動關閉
+        currentMobilePopupId = 'mobile-calendar-container';
+        document.addEventListener('click', onDocumentClick, true);
       });
     }
     
@@ -529,6 +532,10 @@ body * {
     window.addEventListener('touchmove', closeOnTouchMove, { passive: true });
     window.addEventListener('scroll', closeOnTouchMove, { passive: true });
 
+    // 點擊空白處自動關閉
+    currentMobilePopupId = 'mobile-fortune-popup';
+    document.addEventListener('click', onDocumentClick, true);
+
     document.body.appendChild(popup);
   }
   
@@ -579,6 +586,8 @@ body * {
     if (popup) popup.remove();
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
+    currentMobilePopupId = null;
+    document.removeEventListener('click', onDocumentClick, true);
   }
 
   // 關閉手機版行事曆（同時移除 overlay 和隱藏彈窗）
@@ -587,7 +596,23 @@ body * {
     if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
     window.removeEventListener('touchmove', closeMobileCalendarBox);
     window.removeEventListener('scroll', closeMobileCalendarBox);
+    currentMobilePopupId = null;
+    document.removeEventListener('click', onDocumentClick, true);
   };
+
+  let currentMobilePopupId = null;
+  function onDocumentClick(e) {
+    if (currentMobilePopupId) {
+      const popup = document.getElementById(currentMobilePopupId);
+      if (popup && !popup.contains(e.target)) {
+        if (currentMobilePopupId === 'mobile-fortune-popup') {
+          closeMobileFortuneBox();
+        } else if (currentMobilePopupId === 'mobile-calendar-container') {
+          closeMobileCalendarBox();
+        }
+      }
+    }
+  }
 </script>
 
   </head>
