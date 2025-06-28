@@ -426,20 +426,7 @@ body * {
 }
 
 /* 📱 手機版浮動按鈕樣式 */
-.floating-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 32px;
-  background: transparent;
-  border-radius: 50%;
-  padding: 12px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  z-index: 9999;
-  cursor: pointer;
-  /* animation: float 3s infinite; */
-  text-shadow: 0 0 10px rgba(255, 220, 100, 0.8), 0 0 20px rgba(255, 180, 0, 0.6);
-}
+/* 已移除浮動按鈕相關樣式 */
 
 .mobile-fortune-box {
   position: fixed;
@@ -452,6 +439,7 @@ body * {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   pointer-events: none;
 }
+
 .mobile-fortune-box * {
   pointer-events: auto;
 }
@@ -497,7 +485,7 @@ body * {
     document.body.appendChild(trail);
     setTimeout(() => trail.remove(), 500); // 尾巴存活時間
   });
-  
+
   // Mobile button handlers for toolbox and calendar popups
   document.addEventListener('DOMContentLoaded', function() {
     const toolCalendarBtn = document.getElementById('tool-calendar-btn');
@@ -1221,107 +1209,6 @@ function drawFortuneDesktop() {
     }, 75);
   }
 }
-
-function positionMobileFortuneBox() {
-  const mobileBox = document.getElementById("mobile-fortune-box");
-  const floatingBtn = document.querySelector('.floating-btn');
-  if (!mobileBox || !floatingBtn || mobileBox.classList.contains("hidden")) return;
-
-  const btnRect = floatingBtn.getBoundingClientRect();
-  const boxWidth = Math.min(320, window.innerWidth * 0.85);
-
-  mobileBox.style.position = 'fixed';
-  mobileBox.style.right = '20px';
-  mobileBox.style.bottom = (btnRect.height + 16) + 'px'; // 16px 間距
-  mobileBox.style.left = '';
-  mobileBox.style.top = '';
-  mobileBox.style.width = boxWidth + 'px';
-}
-
-function toggleFortuneBox(event) {
-  console.log('toggleFortuneBox called');
-  const mobileBox = document.getElementById("mobile-fortune-box");
-  
-  if (mobileBox.classList.contains("hidden")) {
-    // 顯示浮動窗
-    console.log('Showing fortune box');
-    mobileBox.classList.remove("hidden");
-    // 立即定位
-    positionMobileFortuneBox();
-  } else {
-    // 隱藏浮動窗
-    console.log('Hiding fortune box');
-    mobileBox.classList.add("hidden");
-  }
-}
-
-// Add a mobile floating button for fortune drawing and handle device-specific display
-document.addEventListener('DOMContentLoaded', function() {
-  // Add CSS to hide desktop fortune on mobile by default
-  const styleEl = document.createElement('style');
-  styleEl.textContent = '@media (max-width: 767px) { .desktop-fortune-container { display: none !important; } }';
-  document.head.appendChild(styleEl);
-  
-  // Only add the floating button on mobile devices
-  if (window.innerWidth < 768) {
-    // Create floating button
-    const floatingBtn = document.createElement('div');
-    floatingBtn.className = 'floating-btn';
-    floatingBtn.innerHTML = '🎇';
-    floatingBtn.onclick = function(event) {
-      toggleFortuneBox(event);
-    };
-    // 直接加到 body
-    document.body.appendChild(floatingBtn);
-    
-    window.addEventListener('resize', positionMobileFortuneBox);
-    
-    // Ensure desktop fortune box is hidden on mobile
-    const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
-    if (desktopFortuneContainer) {
-      desktopFortuneContainer.style.display = 'none';
-    }
-  }
-});
-
-// Handle window resize events to show/hide mobile elements appropriately
-window.addEventListener('resize', function() {
-  const isMobile = window.innerWidth < 768;
-  const floatingBtn = document.querySelector('.floating-btn');
-  const mobileBox = document.getElementById('mobile-fortune-box');
-  const desktopFortuneContainer = document.querySelector('.desktop-fortune-container');
-  
-  // Hide mobile fortune box when switching to desktop
-  if (!isMobile && mobileBox && !mobileBox.classList.contains('hidden')) {
-    mobileBox.classList.add('hidden');
-  }
-  
-  // Show/hide desktop fortune container based on device
-  if (desktopFortuneContainer) {
-    if (isMobile) {
-      desktopFortuneContainer.style.display = 'none';
-    } else {
-      desktopFortuneContainer.style.display = '';
-    }
-  }
-  
-  // Remove floating button on desktop or add it on mobile if it doesn't exist
-  if (!isMobile && floatingBtn) {
-    floatingBtn.remove();
-  } else if (isMobile && !floatingBtn) {
-    const newFloatingBtn = document.createElement('div');
-    newFloatingBtn.className = 'floating-btn';
-    newFloatingBtn.innerHTML = '🎇';
-    newFloatingBtn.onclick = function(event) {
-      toggleFortuneBox(event);
-    };
-    document.body.appendChild(newFloatingBtn);
-    
-    // 重新設置事件監聽器
-    window.addEventListener('scroll', positionMobileFortuneBox);
-    window.addEventListener('resize', positionMobileFortuneBox);
-  }
-});
 
 // 將百寶箱彈窗移回 body
 window.addEventListener('DOMContentLoaded', function() {
