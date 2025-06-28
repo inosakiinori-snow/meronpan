@@ -470,33 +470,8 @@ body * {
         overlay.id = 'mobile-calendar-popup-overlay';
         overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
         overlay.addEventListener('click', closeMobileCalendarBox);
-
-        // 滑動時自動關閉（需滑動超過 30px 才觸發）
-        let startY = null;
-        function onTouchStart(e) {
-          if (e.touches && e.touches.length > 0) {
-            startY = e.touches[0].clientY;
-          }
-        }
-        function onTouchMove(e) {
-          if (startY !== null && e.touches && e.touches.length > 0) {
-            const deltaY = Math.abs(e.touches[0].clientY - startY);
-            if (deltaY > 30) {
-              closeMobileCalendarBox();
-              window.removeEventListener('touchstart', onTouchStart);
-              window.removeEventListener('touchmove', onTouchMove);
-            }
-          }
-        }
-        window.addEventListener('touchstart', onTouchStart, { passive: true });
-        window.addEventListener('touchmove', onTouchMove, { passive: true });
-
-        // scroll 事件也保留
-        function closeOnScroll() {
-          closeMobileCalendarBox();
-          window.removeEventListener('scroll', closeOnScroll);
-        }
-        window.addEventListener('scroll', closeOnScroll, { once: true });
+        // 滑動 overlay（背景）時自動關閉
+        overlay.addEventListener('touchmove', closeMobileCalendarBox, { passive: true });
 
         document.body.appendChild(overlay);
 
@@ -556,33 +531,8 @@ body * {
 
     // 點擊 overlay 關閉
     overlay.addEventListener('click', closeMobileFortuneBox);
-
-    // 滑動時自動關閉（需滑動超過 30px 才觸發）
-    let startY = null;
-    function onTouchStart(e) {
-      if (e.touches && e.touches.length > 0) {
-        startY = e.touches[0].clientY;
-      }
-    }
-    function onTouchMove(e) {
-      if (startY !== null && e.touches && e.touches.length > 0) {
-        const deltaY = Math.abs(e.touches[0].clientY - startY);
-        if (deltaY > 30) {
-          closeMobileFortuneBox();
-          window.removeEventListener('touchstart', onTouchStart);
-          window.removeEventListener('touchmove', onTouchMove);
-        }
-      }
-    }
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-
-    // scroll 事件也保留
-    function closeOnScroll() {
-      closeMobileFortuneBox();
-      window.removeEventListener('scroll', closeOnScroll);
-    }
-    window.addEventListener('scroll', closeOnScroll, { once: true });
+    // 滑動 overlay（背景）時自動關閉
+    overlay.addEventListener('touchmove', closeMobileFortuneBox, { passive: true });
 
     document.body.appendChild(overlay);
     document.body.appendChild(popup);
