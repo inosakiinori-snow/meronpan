@@ -461,36 +461,21 @@ body * {
     // Handle calendar button click
     if (toolCalendarBtn && mobileCalendarContainer) {
       toolCalendarBtn.addEventListener('click', function() {
-        // 移除已存在的 overlay
-        const existingOverlay = document.getElementById('mobile-calendar-popup-overlay');
-        if (existingOverlay) existingOverlay.remove();
-
-        // 建立 overlay
-        const overlay = document.createElement('div');
-        overlay.id = 'mobile-calendar-popup-overlay';
-        overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
-
-        // 確保只有點擊 overlay 才關閉彈窗
-        overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) {
-            closeMobileCalendarBox();
-          }
-        });
-        
-        // 保留 touchmove 監聽作為備用機制
-        function closeOnTouchMove() {
-          closeMobileCalendarBox();
-          window.removeEventListener('touchmove', closeOnTouchMove);
-        }
-        window.addEventListener('touchmove', closeOnTouchMove, { passive: true, once: true });
-
-        document.body.appendChild(overlay);
-
+        // 先移除已存在的行事曆彈窗（其實只需隱藏）
         // 顯示行事曆
         mobileCalendarContainer.classList.remove('hidden');
         mobileCalendarContainer.style.top = '70px';
         mobileCalendarContainer.style.left = '50%';
         mobileCalendarContainer.style.transform = 'translateX(-50%)';
+
+        // 滑動時自動關閉
+        function closeOnTouchMove() {
+          closeMobileCalendarBox();
+          window.removeEventListener('touchmove', closeOnTouchMove);
+          window.removeEventListener('scroll', closeOnTouchMove);
+        }
+        window.addEventListener('touchmove', closeOnTouchMove, { passive: true });
+        window.addEventListener('scroll', closeOnTouchMove, { passive: true });
       });
     }
     
@@ -510,19 +495,14 @@ body * {
 
   // 創建手機版百寶箱彈窗（全域函數）
   function createMobileFortuneBox() {
-    // 移除已存在的彈窗和遮罩
-    const existingBox = document.getElementById('mobile-fortune-popup-overlay');
+    // 先移除已存在的彈窗
+    const existingBox = document.getElementById('mobile-fortune-popup');
     if (existingBox) existingBox.remove();
-
-    // 建立 overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'mobile-fortune-popup-overlay';
-    overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
 
     // 建立彈窗
     const popup = document.createElement('div');
     popup.id = 'mobile-fortune-popup';
-    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center pointer-events-auto';
+    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
 
     popup.innerHTML = `
       <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
@@ -540,21 +520,15 @@ body * {
       </button>
     `;
 
-    // 點擊 overlay 關閉
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) {
-        closeMobileFortuneBox();
-      }
-    });
-
-    // 保留 touchmove 監聽作為備用機制
+    // 滑動時自動關閉
     function closeOnTouchMove() {
       closeMobileFortuneBox();
       window.removeEventListener('touchmove', closeOnTouchMove);
+      window.removeEventListener('scroll', closeOnTouchMove);
     }
-    window.addEventListener('touchmove', closeOnTouchMove, { passive: true, once: true });
+    window.addEventListener('touchmove', closeOnTouchMove, { passive: true });
+    window.addEventListener('scroll', closeOnTouchMove, { passive: true });
 
-    document.body.appendChild(overlay);
     document.body.appendChild(popup);
   }
   
@@ -602,17 +576,17 @@ body * {
   // 關閉手機版百寶箱（同時移除 overlay 和 popup）
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
-    const overlay = document.getElementById('mobile-fortune-popup-overlay');
     if (popup) popup.remove();
-    if (overlay) overlay.remove();
+    window.removeEventListener('touchmove', closeMobileFortuneBox);
+    window.removeEventListener('scroll', closeMobileFortuneBox);
   }
 
   // 關閉手機版行事曆（同時移除 overlay 和隱藏彈窗）
   window.closeMobileCalendarBox = function() {
-    const overlay = document.getElementById('mobile-calendar-popup-overlay');
     const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
-    if (overlay) overlay.remove();
     if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
+    window.removeEventListener('touchmove', closeMobileCalendarBox);
+    window.removeEventListener('scroll', closeMobileCalendarBox);
   };
 </script>
 
