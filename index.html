@@ -479,11 +479,92 @@ body * {
           mobileCalendarContainer.classList.add('hidden');
         }
         
-        // 直接使用桌面版百寶箱功能
-        drawFortuneDesktop();
+        // 為手機版創建百寶箱彈窗
+        createMobileFortuneBox();
       });
     }
   });
+
+  // 創建手機版百寶箱彈窗（全域函數）
+  function createMobileFortuneBox() {
+    // 移除已存在的彈窗
+    const existingBox = document.getElementById('mobile-fortune-popup');
+    if (existingBox) {
+      existingBox.remove();
+    }
+    
+    // 創建新的彈窗
+    const popup = document.createElement('div');
+    popup.id = 'mobile-fortune-popup';
+    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
+    
+    popup.innerHTML = `
+      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
+      <div class="text-sm text-white text-center leading-relaxed mb-4">
+        抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
+        本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
+        純屬娛樂性質，別太在意結果哦！
+      </div>
+      <button onclick="drawMobileFortune()" class="w-full py-2 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white mb-3">
+        今日籤詩
+      </button>
+      <div id="mobile-fortune-text" class="text-yellow-100 text-sm mt-3 whitespace-pre-line leading-relaxed tracking-wide min-h-[60px]"></div>
+      <button onclick="closeMobileFortuneBox()" class="w-full mt-3 py-2 rounded-md bg-white/10 hover:bg-white/20 transition font-medium text-white">
+        ❌ 關閉
+      </button>
+    `;
+    
+    document.body.appendChild(popup);
+  }
+  
+  // 手機版抽籤函數（全域函數）
+  function drawMobileFortune() {
+    if (isDrawing) return;
+    isDrawing = true;
+    
+    const textEl = document.getElementById('mobile-fortune-text');
+    
+    // Generate fortune
+    const isRare = Math.random() < 0.05;
+    const fortune = isRare
+      ? rareFortune
+      : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    // Reset text element
+    textEl.textContent = "";
+    textEl.classList.remove("text-glow-rainbow");
+    textEl.classList.remove("blink-red");
+    
+    // Apply special styling for special fortunes
+    if (fortune.startsWith("💀 大凶")) {
+      void textEl.offsetWidth;
+      textEl.classList.add("blink-red");
+    }
+
+    if (isRare) {
+      textEl.classList.add("text-glow-rainbow");
+    }
+
+    // Animated text display
+    const chars = Array.from(fortune);
+    let i = 0;
+    const interval = setInterval(() => {
+      textEl.textContent += chars[i];
+      i++;
+      if (i >= chars.length) {
+        clearInterval(interval);
+        isDrawing = false;
+      }
+    }, 75);
+  }
+  
+  // 關閉手機版百寶箱（全域函數）
+  function closeMobileFortuneBox() {
+    const popup = document.getElementById('mobile-fortune-popup');
+    if (popup) {
+      popup.remove();
+    }
+  }
 </script>
 
   </head>
