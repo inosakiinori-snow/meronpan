@@ -461,10 +461,29 @@ body * {
     // Handle calendar button click
     if (toolCalendarBtn && mobileCalendarContainer) {
       toolCalendarBtn.addEventListener('click', function() {
-        // Show calendar
+        // 移除已存在的 overlay
+        const existingOverlay = document.getElementById('mobile-calendar-popup-overlay');
+        if (existingOverlay) existingOverlay.remove();
+
+        // 建立 overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'mobile-calendar-popup-overlay';
+        overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
+        overlay.addEventListener('click', closeMobileCalendarBox);
+
+        // 滑動時自動關閉
+        function closeOnScrollOrTouch() {
+          closeMobileCalendarBox();
+          window.removeEventListener('touchmove', closeOnScrollOrTouch);
+          window.removeEventListener('scroll', closeOnScrollOrTouch);
+        }
+        window.addEventListener('touchmove', closeOnScrollOrTouch, { once: true });
+        window.addEventListener('scroll', closeOnScrollOrTouch, { once: true });
+
+        document.body.appendChild(overlay);
+
+        // 顯示行事曆
         mobileCalendarContainer.classList.remove('hidden');
-        
-        // Position the calendar popup near the top of the screen
         mobileCalendarContainer.style.top = '70px';
         mobileCalendarContainer.style.left = '50%';
         mobileCalendarContainer.style.transform = 'translateX(-50%)';
@@ -487,17 +506,20 @@ body * {
 
   // 創建手機版百寶箱彈窗（全域函數）
   function createMobileFortuneBox() {
-    // 移除已存在的彈窗
-    const existingBox = document.getElementById('mobile-fortune-popup');
-    if (existingBox) {
-      existingBox.remove();
-    }
-    
-    // 創建新的彈窗
+    // 移除已存在的彈窗和遮罩
+    const existingBox = document.getElementById('mobile-fortune-popup-overlay');
+    if (existingBox) existingBox.remove();
+
+    // 建立 overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'mobile-fortune-popup-overlay';
+    overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
+
+    // 建立彈窗
     const popup = document.createElement('div');
     popup.id = 'mobile-fortune-popup';
     popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
-    
+
     popup.innerHTML = `
       <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
       <div class="text-sm text-white text-center leading-relaxed mb-4">
@@ -513,7 +535,20 @@ body * {
         ❌ 關閉
       </button>
     `;
-    
+
+    // 點擊 overlay 關閉
+    overlay.addEventListener('click', closeMobileFortuneBox);
+
+    // 滑動時自動關閉
+    function closeOnScrollOrTouch() {
+      closeMobileFortuneBox();
+      window.removeEventListener('touchmove', closeOnScrollOrTouch);
+      window.removeEventListener('scroll', closeOnScrollOrTouch);
+    }
+    window.addEventListener('touchmove', closeOnScrollOrTouch, { once: true });
+    window.addEventListener('scroll', closeOnScrollOrTouch, { once: true });
+
+    document.body.appendChild(overlay);
     document.body.appendChild(popup);
   }
   
@@ -558,13 +593,21 @@ body * {
     }, 75);
   }
   
-  // 關閉手機版百寶箱（全域函數）
+  // 關閉手機版百寶箱（同時移除 overlay 和 popup）
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
-    if (popup) {
-      popup.remove();
-    }
+    const overlay = document.getElementById('mobile-fortune-popup-overlay');
+    if (popup) popup.remove();
+    if (overlay) overlay.remove();
   }
+
+  // 關閉手機版行事曆（同時移除 overlay 和隱藏彈窗）
+  window.closeMobileCalendarBox = function() {
+    const overlay = document.getElementById('mobile-calendar-popup-overlay');
+    const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
+    if (overlay) overlay.remove();
+    if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
+  };
 </script>
 
   </head>
@@ -602,7 +645,7 @@ body * {
     <div id="mobile-calendar-container" class="fixed top-16 right-4 z-[9999] w-64 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-3 text-white select-none hidden md:hidden">
       <div class="flex justify-between items-center mb-2">
         <h2 class="text-base font-semibold tracking-wide" style="color: #BB9955;">行事曆</h2>
-        <button onclick="document.getElementById('mobile-calendar-container').classList.add('hidden')" class="text-white/70 hover:text-white text-lg">✕</button>
+        <button onclick="closeMobileCalendarBox()" class="text-white/70 hover:text-white text-lg">✕</button>
       </div>
       <hr class="border-t border-yellow-200/40 w-4/5 mx-auto mb-2">
       <div class="flex justify-between items-center mb-2">
