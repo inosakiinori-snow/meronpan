@@ -469,9 +469,20 @@ body * {
         const overlay = document.createElement('div');
         overlay.id = 'mobile-calendar-popup-overlay';
         overlay.className = 'fixed inset-0 z-[9998] bg-black/40';
-        overlay.addEventListener('click', closeMobileCalendarBox);
-        // 滑動 overlay（背景）時自動關閉
-        overlay.addEventListener('touchmove', closeMobileCalendarBox, { passive: true });
+
+        // 確保只有點擊 overlay 才關閉彈窗
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) {
+            closeMobileCalendarBox();
+          }
+        });
+        
+        // 保留 touchmove 監聽作為備用機制
+        function closeOnTouchMove() {
+          closeMobileCalendarBox();
+          window.removeEventListener('touchmove', closeOnTouchMove);
+        }
+        window.addEventListener('touchmove', closeOnTouchMove, { passive: true, once: true });
 
         document.body.appendChild(overlay);
 
@@ -511,7 +522,7 @@ body * {
     // 建立彈窗
     const popup = document.createElement('div');
     popup.id = 'mobile-fortune-popup';
-    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
+    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center pointer-events-auto';
 
     popup.innerHTML = `
       <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
@@ -530,9 +541,18 @@ body * {
     `;
 
     // 點擊 overlay 關閉
-    overlay.addEventListener('click', closeMobileFortuneBox);
-    // 滑動 overlay（背景）時自動關閉
-    overlay.addEventListener('touchmove', closeMobileFortuneBox, { passive: true });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        closeMobileFortuneBox();
+      }
+    });
+
+    // 保留 touchmove 監聽作為備用機制
+    function closeOnTouchMove() {
+      closeMobileFortuneBox();
+      window.removeEventListener('touchmove', closeOnTouchMove);
+    }
+    window.addEventListener('touchmove', closeOnTouchMove, { passive: true, once: true });
 
     document.body.appendChild(overlay);
     document.body.appendChild(popup);
