@@ -1207,50 +1207,48 @@ const rareFortune = `🌈 特別吉
 所有願望都有機會實現（包括買到限量周邊）。
 —— 推薦：今天的你適合大膽嘗試新事物，買周邊也要買最好的！`;
 
+function showDesktopOverlay() {
+  if (!document.getElementById('global-popup-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.id = 'global-popup-overlay';
+    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+    document.body.appendChild(overlay);
+  }
+}
+function hideDesktopOverlay() {
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
+}
 function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
   showDesktopOverlay();
-  // 統一使用桌面版百寶箱
-    const box = document.getElementById("fortune-box");
-    const textEl = document.getElementById("fortune-text");
-    
-    // Generate fortune
-    const isRare = Math.random() < 0.05;
-    const fortune = isRare
-      ? rareFortune
-      : fortunes[Math.floor(Math.random() * fortunes.length)];
-
-    // Show desktop container
-    box.classList.remove("hidden");
-    
-    // Reset text element
-    textEl.textContent = "";
-    textEl.classList.remove("text-glow-rainbow");
-    textEl.classList.remove("blink-red");
-    
-    // Apply special styling for special fortunes
-    if (fortune.startsWith("💀 大凶")) {
-      void textEl.offsetWidth;
-      textEl.classList.add("blink-red");
-    }
-
-    if (isRare) {
-      textEl.classList.add("text-glow-rainbow");
-    }
-
-    // Animated text display for desktop
-    const chars = Array.from(fortune);
-    let i = 0;
-    const interval = setInterval(() => {
-      textEl.textContent += chars[i];
-      i++;
-      if (i >= chars.length) {
-        clearInterval(interval);
-        isDrawing = false;
-      }
-    }, 75);
+  const box = document.getElementById("fortune-box");
+  const textEl = document.getElementById("fortune-text");
+  const isRare = Math.random() < 0.05;
+  const fortune = isRare ? rareFortune : fortunes[Math.floor(Math.random() * fortunes.length)];
+  box.classList.remove("hidden");
+  textEl.textContent = "";
+  textEl.classList.remove("text-glow-rainbow");
+  textEl.classList.remove("blink-red");
+  if (fortune.startsWith("💀 大凶")) {
+    void textEl.offsetWidth;
+    textEl.classList.add("blink-red");
   }
+  if (isRare) {
+    textEl.classList.add("text-glow-rainbow");
+  }
+  const chars = Array.from(fortune);
+  let i = 0;
+  const interval = setInterval(() => {
+    textEl.textContent += chars[i];
+    i++;
+    if (i >= chars.length) {
+      clearInterval(interval);
+      isDrawing = false;
+    }
+  }, 75);
+}
 
 // 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
 window.addEventListener('DOMContentLoaded', function() {
@@ -1396,62 +1394,117 @@ function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
   showDesktopOverlay();
-  // ... existing code ...
-  // Show desktop container
-  box.classList.remove("hidden");
-  // ... existing code ...
-}
-// 在關閉 fortune-box 時呼叫 hideDesktopOverlay()
-// --- Mobile Fortune Overlay ---
-// 修改 createMobileFortuneBox
-function createMobileFortuneBox() {
-  // 先移除已存在的彈窗
-  const existingBox = document.getElementById('mobile-fortune-popup');
-  if (existingBox) existingBox.remove();
-  // 加遮罩
-  if (!document.getElementById('global-popup-overlay')) {
-    const overlay = document.createElement('div');
-    overlay.id = 'global-popup-overlay';
-    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
-    document.body.appendChild(overlay);
+  // 統一使用桌面版百寶箱
+    const box = document.getElementById("fortune-box");
+    const textEl = document.getElementById("fortune-text");
+    
+    // Generate fortune
+    const isRare = Math.random() < 0.05;
+    const fortune = isRare
+      ? rareFortune
+      : fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    // Show desktop container
+    box.classList.remove("hidden");
+    
+    // Reset text element
+    textEl.textContent = "";
+    textEl.classList.remove("text-glow-rainbow");
+    textEl.classList.remove("blink-red");
+    
+    // Apply special styling for special fortunes
+    if (fortune.startsWith("💀 大凶")) {
+      void textEl.offsetWidth;
+      textEl.classList.add("blink-red");
+    }
+
+    if (isRare) {
+      textEl.classList.add("text-glow-rainbow");
+    }
+
+    // Animated text display for desktop
+    const chars = Array.from(fortune);
+    let i = 0;
+    const interval = setInterval(() => {
+      textEl.textContent += chars[i];
+      i++;
+      if (i >= chars.length) {
+        clearInterval(interval);
+        isDrawing = false;
+      }
+    }, 75);
   }
-  // ... existing code ...
-  document.body.appendChild(popup);
-}
-// 在 closeMobileFortuneBox() 時移除遮罩
-function closeMobileFortuneBox() {
-  const popup = document.getElementById('mobile-fortune-popup');
-  if (popup) popup.remove();
-  const overlay = document.getElementById('global-popup-overlay');
-  if (overlay) overlay.remove();
-  window.removeEventListener('touchmove', closeMobileFortuneBox);
-  window.removeEventListener('scroll', closeMobileFortuneBox);
-  currentMobilePopupId = null;
-  document.removeEventListener('click', onDocumentClick, true);
-}
-// --- Mobile Calendar Overlay ---
-window.showMobileCalendarOverlay = function() {
-  if (!document.getElementById('global-popup-overlay')) {
-    const overlay = document.createElement('div');
-    overlay.id = 'global-popup-overlay';
-    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
-    document.body.appendChild(overlay);
+
+// 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
+window.addEventListener('DOMContentLoaded', function() {
+  const imgList = [
+    'uika_2025.PNG',
+    'uika_2025_01.PNG',
+    'uika_2025_02.jpeg',
+    'uika_2025_03.PNG',
+    'uika_2025_04.PNG',
+    'uika_2025_05.PNG',
+    'uika_2025_06.DNG'
+  ];
+  let current = 0;
+  const imgEl = document.getElementById('uika-birthday-img');
+  const prevBtn = document.getElementById('uika-birthday-prev');
+  const nextBtn = document.getElementById('uika-birthday-next');
+  const indicators = document.getElementById('uika-birthday-indicators');
+  if (!imgEl || !prevBtn || !nextBtn) return;
+  function update() {
+    imgEl.src = imgList[current];
+    // 指示器
+    indicators.innerHTML = '';
+    imgList.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
+      dot.style.cursor = 'pointer';
+      dot.onclick = () => { current = i; update(); };
+      indicators.appendChild(dot);
+    });
   }
-}
-window.closeMobileCalendarBox = function() {
-  const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
-  if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
-  const overlay = document.getElementById('global-popup-overlay');
-  if (overlay) overlay.remove();
-  window.removeEventListener('touchmove', closeMobileCalendarBox);
-  window.removeEventListener('scroll', closeMobileCalendarBox);
-  currentMobilePopupId = null;
-  document.removeEventListener('click', onDocumentClick, true);
-};
-// 在 mobile calendar 彈窗開啟時呼叫 showMobileCalendarOverlay()
-// 在 mobile calendar 彈窗關閉時呼叫 closeMobileCalendarBox()
-// --- Desktop Calendar Overlay ---
-// 你可以在 calendar 彈窗開啟時加上 showDesktopOverlay(), 關閉時呼叫 hideDesktopOverlay()
+  prevBtn.onclick = function() {
+    current = (current - 1 + imgList.length) % imgList.length;
+    update();
+  };
+  nextBtn.onclick = function() {
+    current = (current + 1) % imgList.length;
+    update();
+  };
+  update();
+});
+// 左下角人物動態插入，永遠最上層且不會跟著內容滾動，含彩蛋互動
+window.addEventListener('DOMContentLoaded', function() {
+  if (!document.getElementById('global-inori-pan')) {
+    const img = document.createElement('img');
+    img.src = 'inori_pan.gif';
+    img.alt = '左下角色';
+    img.id = 'global-inori-pan';
+    img.style.position = 'fixed';
+    img.style.left = '0';
+    img.style.bottom = '0';
+    img.style.margin = '1rem';
+    img.style.width = '192px'; // w-48
+    img.style.height = 'auto';
+    img.style.zIndex = '99999';
+    img.style.pointerEvents = 'auto';
+    img.style.userSelect = 'none';
+    img.className = 'hidden md:block drop-shadow-xl';
+    document.body.appendChild(img);
+    // 彩蛋互動（加鎖）
+    let isSwitching = false;
+    img.addEventListener('click', function() {
+      if (isSwitching) return;
+      isSwitching = true;
+      img.src = 'inori_wai.gif';
+      setTimeout(() => {
+        img.src = 'inori_pan.gif';
+        isSwitching = false;
+      }, 1000);
+    });
+  }
+});
 </script>
 
 
