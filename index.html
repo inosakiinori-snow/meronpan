@@ -927,23 +927,19 @@ setInterval(createBread, 2000);
 
 
 
-<div class="nebula-soft-card mt-10 text-white/80 text-sm leading-relaxed space-y-3">
+<div class="nebula-soft-card mt-6 md:mt-10 text-white/80 text-sm leading-relaxed space-y-3">
   <img src="star_sparkle.png" class="corner-star tl" alt="星星角落左上">
   <img src="star_sparkle.png" class="corner-star br" alt="星星角落右下">
   <div class="space-x-2 text-xs">
-   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide text-center">
+   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide text-center md:text-left">
   ✨ 關於我 ｜ 菠蘿麵包
 </h2>
-     <div class="mb-4 md:flex md:flex-nowrap md:gap-2">
-      <div class="grid grid-cols-2 gap-1 md:flex-1 mb-1 md:mb-0">
-        <button class="tab-btn text-xs text-white/70 px-3 py-1 rounded-full hover:ring-1 hover:ring-white/30 transition" data-tab="intro">自我介紹</button>
-        <button class="tab-btn text-xs text-white px-3 py-1 rounded-full" data-tab="redflag">關於雷點</button>
-      </div>
-      <div class="grid grid-cols-3 gap-1 md:flex-1">
-        <button class="tab-btn text-xs text-white px-3 py-1 rounded-full" data-tab="fandom">坑單</button>
-        <button class="tab-btn text-xs text-white px-3 py-1 rounded-full" data-tab="pairing">推角＆CP</button>
-        <button class="tab-btn text-xs text-white px-3 py-1 rounded-full" data-tab="social">社群帳號</button>
-      </div>
+     <div class="mb-4 md:flex md:gap-0">
+      <button class="tab-btn text-xs text-white/70 px-3 py-1 rounded-full hover:ring-1 hover:ring-white/30 transition md:flex-1 md:justify-center md:text-xs md:whitespace-nowrap" data-tab="intro">自我介紹</button>
+      <button class="tab-btn text-xs text-white px-3 py-1 rounded-full md:flex-1 md:justify-center md:text-xs md:whitespace-nowrap" data-tab="redflag">關於雷點</button>
+      <button class="tab-btn text-xs text-white px-3 py-1 rounded-full md:flex-1 md:justify-center md:text-xs md:whitespace-nowrap" data-tab="fandom">坑單</button>
+      <button class="tab-btn text-xs text-white px-3 py-1 rounded-full md:flex-1 md:justify-center md:text-xs md:whitespace-nowrap" data-tab="pairing">推角＆CP</button>
+      <button class="tab-btn text-xs text-white px-3 py-1 rounded-full md:flex-1 md:justify-center md:text-xs md:whitespace-nowrap" data-tab="social">社群帳號</button>
     </div>
   </div>
 <div class="tab-content" data-tab="intro">
@@ -979,7 +975,7 @@ setInterval(createBread, 2000);
 
   <!-- 段落 1：可能會雷的地方 -->
   <p class="mb-4 leading-relaxed text-white/80">
-    可能會雷到你的地方：
+    可能會雷到你的地方：<br>
     髒話（熟了之後）、表情符號（例如 🫶）、句尾波浪號（有時）、中國用語、不讀不回(嚴重)
   </p>
 
@@ -1197,45 +1193,45 @@ function drawFortuneDesktop() {
   isDrawing = true;
 
   // 統一使用桌面版百寶箱
-  const box = document.getElementById("fortune-box");
-  const textEl = document.getElementById("fortune-text");
-  
-  // Generate fortune
-  const isRare = Math.random() < 0.05;
-  const fortune = isRare
-    ? rareFortune
-    : fortunes[Math.floor(Math.random() * fortunes.length)];
+    const box = document.getElementById("fortune-box");
+    const textEl = document.getElementById("fortune-text");
+    
+    // Generate fortune
+    const isRare = Math.random() < 0.05;
+    const fortune = isRare
+      ? rareFortune
+      : fortunes[Math.floor(Math.random() * fortunes.length)];
 
-  // Show desktop container
-  box.classList.remove("hidden");
-  
-  // Reset text element
-  textEl.textContent = "";
-  textEl.classList.remove("text-glow-rainbow");
-  textEl.classList.remove("blink-red");
-  
-  // Apply special styling for special fortunes
-  if (fortune.startsWith("💀 大凶")) {
-    void textEl.offsetWidth;
-    textEl.classList.add("blink-red");
-  }
-
-  if (isRare) {
-    textEl.classList.add("text-glow-rainbow");
-  }
-
-  // Animated text display for desktop
-  const chars = Array.from(fortune);
-  let i = 0;
-  const interval = setInterval(() => {
-    textEl.textContent += chars[i];
-    i++;
-    if (i >= chars.length) {
-      clearInterval(interval);
-      isDrawing = false;
+    // Show desktop container
+    box.classList.remove("hidden");
+    
+    // Reset text element
+    textEl.textContent = "";
+    textEl.classList.remove("text-glow-rainbow");
+    textEl.classList.remove("blink-red");
+    
+    // Apply special styling for special fortunes
+    if (fortune.startsWith("💀 大凶")) {
+      void textEl.offsetWidth;
+      textEl.classList.add("blink-red");
     }
-  }, 75);
-}
+
+    if (isRare) {
+      textEl.classList.add("text-glow-rainbow");
+    }
+
+    // Animated text display for desktop
+    const chars = Array.from(fortune);
+    let i = 0;
+    const interval = setInterval(() => {
+      textEl.textContent += chars[i];
+      i++;
+      if (i >= chars.length) {
+        clearInterval(interval);
+        isDrawing = false;
+      }
+    }, 75);
+  }
 
 // 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
 window.addEventListener('DOMContentLoaded', function() {
