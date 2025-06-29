@@ -1208,11 +1208,13 @@ const rareFortune = `🌈 特別吉
 —— 推薦：今天的你適合大膽嘗試新事物，買周邊也要買最好的！`;
 
 function showDesktopOverlay() {
-  if (!document.getElementById('global-popup-overlay')) {
-    const overlay = document.createElement('div');
-    overlay.id = 'global-popup-overlay';
-    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
-    document.body.appendChild(overlay);
+  if (window.innerWidth < 768) {
+    if (!document.getElementById('global-popup-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'global-popup-overlay';
+      overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+      document.body.appendChild(overlay);
+    }
   }
 }
 function hideDesktopOverlay() {
@@ -1350,19 +1352,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // 桌機百寶箱
     var desktopFortune = document.querySelector('.desktop-fortune-container');
     if (desktopFortune) {
-      desktopFortune.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
+      desktopFortune.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/10','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
       desktopFortune.classList.add('bg-[#0b0c29]/90');
     }
     // 行事曆
     var calendar = document.getElementById('calendar-container');
     if (calendar) {
-      calendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
+      calendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/10','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
       calendar.classList.add('bg-[#0b0c29]/90');
     }
     // 手機行事曆
     var mobileCalendar = document.getElementById('mobile-calendar-container');
     if (mobileCalendar) {
-      mobileCalendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
+      mobileCalendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','bg-[#0b0c29]/10','bg-[#0b0c29]/80','backdrop-blur-md','backdrop-blur-lg');
       mobileCalendar.classList.add('bg-[#0b0c29]/90');
     }
   }
@@ -1378,11 +1380,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add this to the prevMonth/nextMonth/calendar open logic if needed (if you have a manual open)
 // --- Desktop Fortune Overlay ---
 function showDesktopOverlay() {
-  if (!document.getElementById('global-popup-overlay')) {
-    const overlay = document.createElement('div');
-    overlay.id = 'global-popup-overlay';
-    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
-    document.body.appendChild(overlay);
+  if (window.innerWidth < 768) {
+    if (!document.getElementById('global-popup-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'global-popup-overlay';
+      overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+      document.body.appendChild(overlay);
+    }
   }
 }
 function hideDesktopOverlay() {
@@ -1505,6 +1509,19 @@ window.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// --- Mobile Calendar Overlay ---
+window.showMobileCalendarOverlay = function() {
+  if (window.innerWidth < 768) {
+    if (!document.getElementById('global-popup-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'global-popup-overlay';
+      overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+      document.body.appendChild(overlay);
+    }
+  }
+}
+
 </script>
 
 
