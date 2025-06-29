@@ -514,7 +514,7 @@ body * {
     var isAndroid = /android/i.test(navigator.userAgent);
     const popup = document.createElement('div');
     popup.id = 'mobile-fortune-popup';
-    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 ' + (isAndroid ? 'bg-[#0b0c29]' : 'bg-white/10 backdrop-blur-md') + ' rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
+    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 ' + (isAndroid ? 'bg-[#0b0c29]/90' : 'bg-white/10 backdrop-blur-md') + ' rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
 
     popup.innerHTML = `
       <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
@@ -1350,20 +1350,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // 桌機百寶箱
     var desktopFortune = document.querySelector('.desktop-fortune-container');
     if (desktopFortune) {
-      desktopFortune.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','backdrop-blur-md','backdrop-blur-lg');
-      desktopFortune.classList.add('bg-[#0b0c29]');
+      desktopFortune.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','backdrop-blur-md','backdrop-blur-lg');
+      desktopFortune.classList.add('bg-[#0b0c29]/90');
     }
     // 行事曆
     var calendar = document.getElementById('calendar-container');
     if (calendar) {
-      calendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','backdrop-blur-md','backdrop-blur-lg');
-      calendar.classList.add('bg-[#0b0c29]');
+      calendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','backdrop-blur-md','backdrop-blur-lg');
+      calendar.classList.add('bg-[#0b0c29]/90');
     }
     // 手機行事曆
     var mobileCalendar = document.getElementById('mobile-calendar-container');
     if (mobileCalendar) {
-      mobileCalendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','backdrop-blur-md','backdrop-blur-lg');
-      mobileCalendar.classList.add('bg-[#0b0c29]');
+      mobileCalendar.classList.remove('bg-white/5','bg-white/10','bg-white/20','bg-white/40','bg-white/60','bg-white/80','bg-[#0b0c29]','backdrop-blur-md','backdrop-blur-lg');
+      mobileCalendar.classList.add('bg-[#0b0c29]/90');
     }
   }
 });
