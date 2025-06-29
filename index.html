@@ -503,9 +503,10 @@ body * {
     if (existingBox) existingBox.remove();
 
     // 建立彈窗
+    var isAndroid = /android/i.test(navigator.userAgent);
     const popup = document.createElement('div');
     popup.id = 'mobile-fortune-popup';
-    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
+    popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 ' + (isAndroid ? 'bg-white/40' : 'bg-white/10') + ' backdrop-blur-md rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
 
     popup.innerHTML = `
       <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
@@ -648,8 +649,8 @@ body * {
 
     <!-- 手機版行事曆卡片 -->
     <div id="mobile-calendar-container" class="fixed top-16 right-4 z-[9999] w-64 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-3 text-white select-none hidden md:hidden">
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="text-base font-semibold tracking-wide text-center" style="color: #BB9955;">行事曆</h2>
+      <h2 class="text-base font-semibold tracking-wide text-center" style="color: #BB9955;">行事曆</h2>
+      <div class="flex justify-end items-center mb-2">
         <button onclick="closeMobileCalendarBox()" class="text-white/70 hover:text-white text-lg">✕</button>
       </div>
       <hr class="border-t border-yellow-200/40 w-4/5 mx-auto mb-2">
@@ -1332,6 +1333,31 @@ window.addEventListener('DOMContentLoaded', function() {
 
 <!-- 📦 百寶屋彈出卡片 -->
 <!-- 已移除浮動百寶箱彈窗 -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (/android/i.test(navigator.userAgent)) {
+    // 桌機百寶箱
+    var desktopFortune = document.querySelector('.desktop-fortune-container');
+    if (desktopFortune) {
+      desktopFortune.classList.remove('bg-white/5');
+      desktopFortune.classList.add('bg-white/40');
+    }
+    // 行事曆
+    var calendar = document.getElementById('calendar-container');
+    if (calendar) {
+      calendar.classList.remove('bg-white/5');
+      calendar.classList.add('bg-white/40');
+    }
+    // 手機行事曆
+    var mobileCalendar = document.getElementById('mobile-calendar-container');
+    if (mobileCalendar) {
+      mobileCalendar.classList.remove('bg-white/5');
+      mobileCalendar.classList.add('bg-white/40');
+    }
+  }
+});
+</script>
 
 
 
