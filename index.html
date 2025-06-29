@@ -502,6 +502,14 @@ body * {
     const existingBox = document.getElementById('mobile-fortune-popup');
     if (existingBox) existingBox.remove();
 
+    // 加遮罩
+    if (!document.getElementById('global-popup-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'global-popup-overlay';
+      overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+      document.body.appendChild(overlay);
+    }
+
     // 建立彈窗
     var isAndroid = /android/i.test(navigator.userAgent);
     const popup = document.createElement('div');
@@ -585,6 +593,8 @@ body * {
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
+    const overlay = document.getElementById('global-popup-overlay');
+    if (overlay) overlay.remove();
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
     currentMobilePopupId = null;
@@ -595,6 +605,8 @@ body * {
   window.closeMobileCalendarBox = function() {
     const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
     if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
+    const overlay = document.getElementById('global-popup-overlay');
+    if (overlay) overlay.remove();
     window.removeEventListener('touchmove', closeMobileCalendarBox);
     window.removeEventListener('scroll', closeMobileCalendarBox);
     currentMobilePopupId = null;
@@ -1198,7 +1210,7 @@ const rareFortune = `🌈 特別吉
 function drawFortuneDesktop() {
   if (isDrawing) return;
   isDrawing = true;
-
+  showDesktopOverlay();
   // 統一使用桌面版百寶箱
     const box = document.getElementById("fortune-box");
     const textEl = document.getElementById("fortune-text");
@@ -1357,6 +1369,89 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+</script>
+
+<script>
+// 1. Add overlay div creation/removal in JS for calendar and fortune popups
+// 2. For desktop calendar and fortune, insert overlay before showing popup, remove on close
+// 3. For mobile calendar and fortune, do the same
+
+// --- Desktop Calendar Overlay ---
+// Add this to the prevMonth/nextMonth/calendar open logic if needed (if you have a manual open)
+// --- Desktop Fortune Overlay ---
+function showDesktopOverlay() {
+  if (!document.getElementById('global-popup-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.id = 'global-popup-overlay';
+    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+    document.body.appendChild(overlay);
+  }
+}
+function hideDesktopOverlay() {
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
+}
+// 修改 drawFortuneDesktop
+function drawFortuneDesktop() {
+  if (isDrawing) return;
+  isDrawing = true;
+  showDesktopOverlay();
+  // ... existing code ...
+  // Show desktop container
+  box.classList.remove("hidden");
+  // ... existing code ...
+}
+// 在關閉 fortune-box 時呼叫 hideDesktopOverlay()
+// --- Mobile Fortune Overlay ---
+// 修改 createMobileFortuneBox
+function createMobileFortuneBox() {
+  // 先移除已存在的彈窗
+  const existingBox = document.getElementById('mobile-fortune-popup');
+  if (existingBox) existingBox.remove();
+  // 加遮罩
+  if (!document.getElementById('global-popup-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.id = 'global-popup-overlay';
+    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+    document.body.appendChild(overlay);
+  }
+  // ... existing code ...
+  document.body.appendChild(popup);
+}
+// 在 closeMobileFortuneBox() 時移除遮罩
+function closeMobileFortuneBox() {
+  const popup = document.getElementById('mobile-fortune-popup');
+  if (popup) popup.remove();
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
+  window.removeEventListener('touchmove', closeMobileFortuneBox);
+  window.removeEventListener('scroll', closeMobileFortuneBox);
+  currentMobilePopupId = null;
+  document.removeEventListener('click', onDocumentClick, true);
+}
+// --- Mobile Calendar Overlay ---
+window.showMobileCalendarOverlay = function() {
+  if (!document.getElementById('global-popup-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.id = 'global-popup-overlay';
+    overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+    document.body.appendChild(overlay);
+  }
+}
+window.closeMobileCalendarBox = function() {
+  const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
+  if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
+  window.removeEventListener('touchmove', closeMobileCalendarBox);
+  window.removeEventListener('scroll', closeMobileCalendarBox);
+  currentMobilePopupId = null;
+  document.removeEventListener('click', onDocumentClick, true);
+};
+// 在 mobile calendar 彈窗開啟時呼叫 showMobileCalendarOverlay()
+// 在 mobile calendar 彈窗關閉時呼叫 closeMobileCalendarBox()
+// --- Desktop Calendar Overlay ---
+// 你可以在 calendar 彈窗開啟時加上 showDesktopOverlay(), 關閉時呼叫 hideDesktopOverlay()
 </script>
 
 
