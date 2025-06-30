@@ -593,8 +593,7 @@ body * {
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
-    const overlay = document.getElementById('global-popup-overlay');
-    if (overlay) overlay.remove();
+    removeGlobalPopupOverlay();
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
     currentMobilePopupId = null;
@@ -605,8 +604,7 @@ body * {
   window.closeMobileCalendarBox = function() {
     const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
     if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
-    const overlay = document.getElementById('global-popup-overlay');
-    if (overlay) overlay.remove();
+    removeGlobalPopupOverlay();
     window.removeEventListener('touchmove', closeMobileCalendarBox);
     window.removeEventListener('scroll', closeMobileCalendarBox);
     currentMobilePopupId = null;
@@ -1218,8 +1216,7 @@ function showDesktopOverlay() {
   }
 }
 function hideDesktopOverlay() {
-  const overlay = document.getElementById('global-popup-overlay');
-  if (overlay) overlay.remove();
+  removeGlobalPopupOverlay();
 }
 function drawFortuneDesktop() {
   if (isDrawing) return;
@@ -1390,8 +1387,7 @@ function showDesktopOverlay() {
   }
 }
 function hideDesktopOverlay() {
-  const overlay = document.getElementById('global-popup-overlay');
-  if (overlay) overlay.remove();
+  removeGlobalPopupOverlay();
 }
 // 修改 drawFortuneDesktop
 function drawFortuneDesktop() {
@@ -1520,6 +1516,39 @@ window.showMobileCalendarOverlay = function() {
       document.body.appendChild(overlay);
     }
   }
+}
+
+// Utility function to remove overlay
+function removeGlobalPopupOverlay() {
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
+}
+
+// Update closeMobileFortuneBox
+function closeMobileFortuneBox() {
+  const popup = document.getElementById('mobile-fortune-popup');
+  if (popup) popup.remove();
+  removeGlobalPopupOverlay();
+  window.removeEventListener('touchmove', closeMobileFortuneBox);
+  window.removeEventListener('scroll', closeMobileFortuneBox);
+  currentMobilePopupId = null;
+  document.removeEventListener('click', onDocumentClick, true);
+}
+
+// Update closeMobileCalendarBox
+window.closeMobileCalendarBox = function() {
+  const mobileCalendarContainer = document.getElementById('mobile-calendar-container');
+  if (mobileCalendarContainer) mobileCalendarContainer.classList.add('hidden');
+  removeGlobalPopupOverlay();
+  window.removeEventListener('touchmove', closeMobileCalendarBox);
+  window.removeEventListener('scroll', closeMobileCalendarBox);
+  currentMobilePopupId = null;
+  document.removeEventListener('click', onDocumentClick, true);
+};
+
+// Update desktop popup close logic (if any)
+function hideDesktopOverlay() {
+  removeGlobalPopupOverlay();
 }
 
 </script>
