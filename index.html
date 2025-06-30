@@ -593,8 +593,7 @@ body * {
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
-    const overlay = document.getElementById('global-popup-overlay');
-    if (overlay) overlay.remove();
+    document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
     currentMobilePopupId = null;
@@ -1529,8 +1528,7 @@ function removeGlobalPopupOverlay() {
 function closeMobileFortuneBox() {
   const popup = document.getElementById('mobile-fortune-popup');
   if (popup) popup.remove();
-  const overlay = document.getElementById('global-popup-overlay');
-  if (overlay) overlay.remove();
+  document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
   window.removeEventListener('touchmove', closeMobileFortuneBox);
   window.removeEventListener('scroll', closeMobileFortuneBox);
   currentMobilePopupId = null;
