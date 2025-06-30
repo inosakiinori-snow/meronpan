@@ -594,6 +594,9 @@ body * {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
     removeGlobalPopupOverlay();
+    // 強制移除 body/html 上的 overflow: hidden
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
     currentMobilePopupId = null;
@@ -1529,6 +1532,9 @@ function closeMobileFortuneBox() {
   const popup = document.getElementById('mobile-fortune-popup');
   if (popup) popup.remove();
   removeGlobalPopupOverlay();
+  // 強制移除 body/html 上的 overflow: hidden
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
   window.removeEventListener('touchmove', closeMobileFortuneBox);
   window.removeEventListener('scroll', closeMobileFortuneBox);
   currentMobilePopupId = null;
