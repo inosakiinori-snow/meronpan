@@ -593,7 +593,8 @@ body * {
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
-    removeGlobalPopupOverlay();
+    // 強制移除所有殘留的遮罩
+    document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
     // 強制移除 body/html 上的 overflow: hidden
     document.body.style.overflow = '';
     document.documentElement.style.overflow = '';
@@ -1531,7 +1532,8 @@ function removeGlobalPopupOverlay() {
 function closeMobileFortuneBox() {
   const popup = document.getElementById('mobile-fortune-popup');
   if (popup) popup.remove();
-  removeGlobalPopupOverlay();
+  // 強制移除所有殘留的遮罩
+  document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
   // 強制移除 body/html 上的 overflow: hidden
   document.body.style.overflow = '';
   document.documentElement.style.overflow = '';
