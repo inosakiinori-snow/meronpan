@@ -498,18 +498,17 @@ body * {
 
   // 創建手機版百寶箱彈窗（全域函數）
   function createMobileFortuneBox() {
-    // 先移除已存在的彈窗
     const existingBox = document.getElementById('mobile-fortune-popup');
     if (existingBox) existingBox.remove();
-
-    // 加遮罩
-    if (!document.getElementById('global-popup-overlay')) {
-      const overlay = document.createElement('div');
-      overlay.id = 'global-popup-overlay';
-      overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
-      document.body.appendChild(overlay);
+    // 加遮罩（僅限手機）
+    if (window.innerWidth < 768) {
+      if (!document.getElementById('global-popup-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.id = 'global-popup-overlay';
+        overlay.className = 'fixed inset-0 bg-black/20 z-[9998]';
+        document.body.appendChild(overlay);
+      }
     }
-
     // 建立彈窗
     var isAndroid = /android/i.test(navigator.userAgent);
     const popup = document.createElement('div');
@@ -593,7 +592,8 @@ body * {
   function closeMobileFortuneBox() {
     const popup = document.getElementById('mobile-fortune-popup');
     if (popup) popup.remove();
-    document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
+    const overlay = document.getElementById('global-popup-overlay');
+    if (overlay) overlay.remove();
     window.removeEventListener('touchmove', closeMobileFortuneBox);
     window.removeEventListener('scroll', closeMobileFortuneBox);
     currentMobilePopupId = null;
@@ -1528,7 +1528,8 @@ function removeGlobalPopupOverlay() {
 function closeMobileFortuneBox() {
   const popup = document.getElementById('mobile-fortune-popup');
   if (popup) popup.remove();
-  document.querySelectorAll('#global-popup-overlay').forEach(el => el.remove());
+  const overlay = document.getElementById('global-popup-overlay');
+  if (overlay) overlay.remove();
   window.removeEventListener('touchmove', closeMobileFortuneBox);
   window.removeEventListener('scroll', closeMobileFortuneBox);
   currentMobilePopupId = null;
