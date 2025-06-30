@@ -6,6 +6,11 @@
     <title>菠蘿宇宙名片</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
 /* 移除自訂字體設定，恢復預設 */
@@ -29,7 +34,7 @@
       }
 
       body {
-        font-family: 'Noto Sans TC', 'Noto Sans JP', 'Microsoft JhengHei', 'PingFang TC', 'Meiryo', 'sans-serif';
+        font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         background: radial-gradient(ellipse at 50% 100%, #1c1f3f 0%, #0b0c29 60%, #050510 100%);
         background-attachment: fixed;
         overflow: visible;
@@ -37,6 +42,9 @@
         position: relative;
         z-index: 0;
         margin: 0;
+        font-feature-settings: 'liga' 1, 'kern' 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       body::after {
@@ -105,7 +113,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.05);
   z-index: 0;
-
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   transform: translateZ(0);
   will-change: auto;
 }
@@ -131,6 +139,9 @@
 }
 .tab-btn {
   transition: all 0.3s ease;
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 
@@ -206,6 +217,8 @@
   font-size: 1rem;
   color: #fff;
   margin-bottom: 0.5rem;
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.025em;
 }
 
 .nebula-subtitle::before {
@@ -509,7 +522,7 @@ body * {
     popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-80 ' + (isAndroid ? 'bg-[#0b0c29]/90' : 'bg-white/10 backdrop-blur-md') + ' rounded-2xl border border-white/20 shadow-xl p-4 text-white text-center';
 
     popup.innerHTML = `
-      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">雪球的百寶屋</h2>
+      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2 main-title">雪球的百寶屋</h2>
       <div class="text-sm text-white text-center leading-relaxed mb-4">
         抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
         本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
@@ -626,7 +639,7 @@ body * {
 
     <!-- 更淡、更融入背景的現代感月曆元件 -->
     <div id="calendar-container" class="fixed top-[80px] right-[120px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-4 text-white select-none md:block hidden">
-      <h2 class="text-lg font-semibold text-center mb-2 tracking-wide" style="color: #BB9955;">行事曆</h2>
+      <h2 class="text-lg font-semibold text-center mb-2 tracking-wide main-title" style="color: #BB9955;">行事曆</h2>
       <hr class="border-t border-yellow-200/40 w-4/5 mx-auto mb-3">
       <div class="flex justify-between items-center mb-3">
         <button onclick="prevMonth()" class="rounded-full bg-white/10 hover:bg-white/20 text-gray-200 w-8 h-8 flex items-center justify-center transition"><span class="text-lg">&#8592;</span></button>
@@ -651,7 +664,7 @@ body * {
 
     <!-- 手機版行事曆卡片 -->
     <div id="mobile-calendar-container" class="fixed top-16 right-4 z-[9999] w-64 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg p-3 text-white select-none hidden md:hidden">
-      <h2 class="text-base font-semibold tracking-wide text-center" style="color: #BB9955;">行事曆</h2>
+      <h2 class="text-base font-semibold tracking-wide text-center main-title" style="color: #BB9955;">行事曆</h2>
       <div class="flex justify-end items-center mb-2">
         <button onclick="closeMobileCalendarBox()" class="text-white/70 hover:text-white text-lg">✕</button>
       </div>
@@ -804,9 +817,7 @@ body * {
 
     <!-- 雪球的百寶屋（強化版） -->
     <div class="fixed top-[80px] left-[48px] z-[9999] w-72 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-4 text-white text-center desktop-fortune-container">
-      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2">
-        雪球的百寶屋
-      </h2>
+      <h2 class="text-lg font-bold text-yellow-400 text-center mb-2 main-title">雪球的百寶屋</h2>
       <div class="text-sm text-white text-center leading-relaxed mb-4">
         抽個籤玩玩，說不定會抽到隱藏籤哦！<br>
         本抽籤由 <span class="font-semibold text-amber-300">菠蘿法師</span> 提供，<br>
@@ -877,16 +888,16 @@ setInterval(createBread, 2000);
       <img src="avatar.JPG" alt="我的頭貼"
           class="avatar-img mx-auto -mb-4 z-10 fade-in" />
       <div class="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl max-w-md w-full text-center border border-white/20">
-        <h1 class="text-3xl font-extrabold text-transparent bg-gradient-to-r from-indigo-500 via-purple-400 to-pink-400 bg-clip-text drop-shadow-[0_0_6px_rgba(180,160,255,0.4)]">
+        <h1 class="main-title text-3xl font-extrabold text-transparent bg-gradient-to-r from-indigo-500 via-purple-400 to-pink-400 bg-clip-text drop-shadow-[0_0_6px_rgba(180,160,255,0.4)]">
           法式菠蘿麵包
         </h1>
-        <p class="text-sm mt-2 italic tracking-wide leading-relaxed text-white/80">
+        <p class="text-sm mt-2 italic tracking-wide leading-relaxed text-white/80 emphasis-text">
           暱稱｜雪球・菠蘿・自取
         </p>
         <p class="text-white/70 text-sm mt-4 tracking-wide">
           ◇ 電波系　★ 魔法廚　○ 偶爾出沒的幽靈人口
         </p>
-        <p class="text-white/50 text-xs mt-3 italic">
+        <p class="text-white/50 text-xs mt-3 italic emphasis-text">
           —— 歡迎來到菠蘿麵包星 ——
         </p>
 
@@ -934,7 +945,7 @@ setInterval(createBread, 2000);
   <img src="star_sparkle.png" class="corner-star tl" alt="星星角落左上">
   <img src="star_sparkle.png" class="corner-star br" alt="星星角落右下">
   <div class="space-x-2 text-xs">
-   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide text-center md:text-left">
+   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide text-center md:text-left main-title">
   ✨ 關於我 ｜ 菠蘿麵包
 </h2>
      <div class="mb-4 md:flex md:gap-0">
@@ -1091,7 +1102,7 @@ setInterval(createBread, 2000);
 <section class="mt-20 mb-16">
   <div class="max-w-2xl mx-auto px-6">
     <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl shadow-[0_0_32px_#FFD70080] ring-4 ring-yellow-200/40 text-white text-center border-4 border-yellow-300 relative overflow-visible">
-      <h3 class="text-xl font-bold text-yellow-300 mb-4">2025.6.26 初華生誕祭</h3>
+      <h3 class="text-xl font-bold text-yellow-300 mb-4 main-title">2025.6.26 初華生誕祭</h3>
       <div class="relative overflow-hidden rounded-xl">
         <img id="uika-birthday-img" src="uika_2025.PNG" alt="初華生誕祭" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
         <!-- 左右切換按鈕 -->
@@ -1107,7 +1118,7 @@ setInterval(createBread, 2000);
 <section class="mt-20 mb-16">
   <div class="max-w-2xl mx-auto px-6">
     <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl text-white text-center border border-white/10">
-      <h3 class="text-xl font-bold text-yellow-300 mb-4">遊戲ID｜歡迎加友</h3>
+      <h3 class="text-xl font-bold text-yellow-300 mb-4 main-title">遊戲ID｜歡迎加友</h3>
       <div class="overflow-hidden rounded-xl">
         <img src="BD.png" alt="遊戲截圖" class="w-[480px] max-w-full h-auto object-contain rounded-xl shadow-lg">
         <p class="text-base text-white font-semibold mt-4 tracking-wide">
@@ -1326,7 +1337,7 @@ window.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <!-- 落款文字 -->
-    <span class="relative z-10">
+    <span class="relative z-10 emphasis-text">
       本網頁製作為 <span class="font-semibold text-white/80">法式菠蘿麵包</span>
     </span>
   </div>
