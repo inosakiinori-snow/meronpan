@@ -764,6 +764,12 @@ body * {
           };
         }
         
+        // 11/11 & 12/12 生日高亮
+        if ((currentYear === 2025 && currentMonth === 10 && i === 11) ||
+          (currentYear === 2025 && currentMonth === 11 && (i === 12 || i === 24 || i === 25 || i === 31))) {
+          dayElem.className += ' bg-rose-200/40 text-white font-semibold';
+        }
+
         if (daysElem) daysElem.appendChild(dayElem.cloneNode(true));
         if (mobileDaysElem) mobileDaysElem.appendChild(dayElem.cloneNode(true));
       }
@@ -781,6 +787,19 @@ body * {
           '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
           '<li>🎂 6/13 我的生日</li>' +
           '<li>⭐ 6/26 初華的生日</li>' +
+          '</ul>';
+      } else if (currentYear === 2025 && currentMonth === 10) {
+        eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
+          '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>🍷 11/11 拉普蘭德的生日</li>' +
+          '</ul>';
+      } else if (currentYear === 2025 && currentMonth === 11) {
+        eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
+          '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>😈 12/12 莫斯提馬的生日</li>' +
+          '<li>🕯️ 12/24 平安夜</li>' +
+          '<li>🎄 12/25 聖誕節</li>' +
+          '<li>🎆 12/31 年末</li>' +
           '</ul>';
       }
       
@@ -996,7 +1015,7 @@ setInterval(createBread, 2000);
   <!-- 段落 1：可能會雷的地方 -->
   <p class="mb-4 leading-relaxed text-white/80">
     可能會雷到你的地方：<br>
-    髒話（熟了之後）、表情符號（例如 🫶）、句尾波浪號（有時）、中國用語、不讀不回(嚴重)
+    髒話（熟了之後）、表情符號（例如 🫶）、句尾波浪號（有時）、中國用語、不讀不回(嚴重)、米遊
   </p>
 
   <!-- 段落 2：回覆頻率 -->
@@ -1014,7 +1033,7 @@ setInterval(createBread, 2000);
   <div class="max-w-4xl mx-auto">
   <!-- 區塊：目前主坑 -->
   <div class="mb-8">
-    <h4 class="nebula-subtitle">目前主坑（2025/10/09 更新）</h4>
+    <h4 class="nebula-subtitle">目前主坑（2025/11/17 更新）</h4>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-2 text-sm">
       <li>
         <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap whitespace-nowrap">魔法少女的魔女裁判</span>：最近周邊賭很兇。大家快去玩遊戲！！
@@ -1064,9 +1083,8 @@ setInterval(createBread, 2000);
   <div class="mb-6">
       <h4 class="nebula-subtitle">最近版上常嚎的</h4>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>：(主推) 黑部ナノカ、橘シェリー</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：(主推) 易、水月；(副推) 傀影、見行者、拉普蘭德、Logos</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ</span>：(主推) 三角初華</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>：(主推) 黑部ナノカ；(副推)橘シェリー</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：(主推) 易、莫斯提馬、拉普蘭德；(副推)水月、德克薩斯 </li>
     </ul>
   </div>
   
@@ -1076,9 +1094,10 @@ setInterval(createBread, 2000);
   <div class="mb-6">
       <h4 class="nebula-subtitle">其它有坑過的</h4>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ</span>：(主推) 三角初華</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：(主推) 尼祿、呆毛王；(副推) 恩奇都、貝德維爾</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：丹恆、刻律德菈；(副推) 長夜月</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：(主推) 日野森志步；(副推) 神代類、東雲繪名、宵崎奏</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：刻律德菈</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：(主推) 日野森志步；(副推) 東雲繪名</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">原神</span>：溫迪、楓原萬葉</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">重返未來1999</span>：維爾汀、槲寄生、紅弩箭、37</li>
     </ul>
@@ -1089,6 +1108,7 @@ setInterval(createBread, 2000);
   <div class="mb-6">
     <h3 class="nebula-subtitle">CP(基本雜食，以下列出的是比較愛吃的)</h3>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 mb-4">
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：雙狼(基本站德拉)、莫能<span class="text-red-400">(莫斯提馬不吃莫能以外的CP)</span></li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：丹恆相關 CP 只吃丹穹／丹星。</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">邦邦</span>：主食モカ蘭、燈祥</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：類司、みずえな</li>
