@@ -184,11 +184,15 @@
 .corner-star.tl {
   top: -12px;
   left: -12px;
+  right: auto;
+  bottom: auto;
 }
 
 .corner-star.br {
   bottom: -12px;
   right: -12px;
+  top: auto;
+  left: auto;
 }
 
 @keyframes twinkle {
@@ -202,7 +206,7 @@
   }
 
   .tab-btn {
-    font-size: 0.75rem; /* 再小一點可讀性佳 */
+    font-size: 0.75rem; 
     padding: 4px 10px;
   }
 
@@ -215,11 +219,17 @@
   padding-left: 1rem;
   font-weight: 600;
   font-size: 1rem;
-  color: #fff;
+  color: #E9D5FF !important;
   margin-bottom: 0.5rem;
   font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   letter-spacing: -0.025em;
 }
+
+
+.nebula-subtitle--fuchsia { color: inherit; }
+.nebula-subtitle--pink { color: inherit; }
+.nebula-subtitle--indigo { color: inherit; }
+.nebula-subtitle--rose { color: inherit; }
 
 .nebula-subtitle::before {
   content: "";
@@ -231,6 +241,86 @@
   border-radius: 2px;
   background: linear-gradient(to bottom, #f0abfc, #a78bfa, #60a5fa); /* 紫→粉→藍 */
   box-shadow: 0 0 4px rgba(240, 171, 252, 0.5);
+}
+
+/* 坑單區塊的小標題使用淡灰色 */
+.tab-content[data-tab="fandom"] .nebula-subtitle {
+  color: #e5e7eb !important; /* gray-200 */
+}
+.tab-content[data-tab="fandom"] .fandom-title-primary {
+  color: #d8b4fe !important; /* purple-300 */
+}
+
+/* 只在坑單區塊移除標籤底色與邊框，其他（例如推角＆CP）維持原本紫色 */
+.tab-content[data-tab="fandom"] .bg-purple-800\/30 {
+  background-color: transparent !important;
+}
+.tab-content[data-tab="fandom"] .border-purple-600\/40 {
+  border-color: transparent !important;
+}
+
+/* 坑單區塊內文字體維持正常（使用原本 text-sm） */
+.tab-content[data-tab="fandom"] ul.list-disc li {
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* 坑單版面優化 */
+.tab-content[data-tab="fandom"] .fandom-main-list {
+  margin-top: 0.4rem;
+}
+.tab-content[data-tab="fandom"] .fandom-main-list li {
+  line-height: 1.75;
+}
+.tab-content[data-tab="fandom"] .fandom-main-list .fandom-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.5rem;
+  border-radius: 0.45rem;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.tab-content[data-tab="fandom"] .fandom-divider {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+.tab-content[data-tab="fandom"] .fandom-lite-list {
+  margin-top: 0.5rem;
+}
+.tab-content[data-tab="fandom"] .fandom-lite-list li {
+  margin-bottom: 0.15rem;
+  line-height: 1.65;
+}
+.tab-content[data-tab="fandom"] .fandom-note {
+  margin-top: 0.9rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+/* 「推角＆CP」tab 內的清單字體縮小（魔女裁判那邊） */
+.tab-content[data-tab="pairing"] ul.list-disc li {
+  font-size: 0.82rem; /* 介於 text-xs 與 text-sm 之間，略小但清楚 */
+}
+
+/* 「可能會雷到你的地方」標籤左側紅藍漸層線 */
+.redflag-label {
+  position: relative;
+  padding-left: 1rem;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #f97373; /* 稍深一點的紅色 */
+}
+.redflag-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  bottom: 0.1rem;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #fb7185, #f97316, #60a5fa); /* 紅→橙→藍 */
+  box-shadow: 0 0 4px rgba(248, 113, 113, 0.5);
 }
 .bread-float,
 .shooting-star {
@@ -743,11 +833,11 @@ body * {
           dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
         }
         
-        // 6月生日：13、26 淡紫色高亮，hover 時顯示 emoji
-        if (currentMonth === 5 && (i === 13 || i === 26)) {
+        // 6月生日：1、13、26 淡紫色高亮，hover 時顯示 emoji
+        if (currentMonth === 5 && (i === 1 || i === 13 || i === 26)) {
           dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
           dayElem.onmouseenter = function() {
-            let emoji = i === 13 ? '🎂' : '⭐';
+            let emoji = i === 1 ? '🍫' : (i === 13 ? '🎂' : '⭐');
             let badge = document.createElement('span');
             badge.textContent = emoji;
             badge.style.position = 'absolute';
@@ -764,9 +854,9 @@ body * {
           };
         }
         
-        // 11/11 & 12/12 生日高亮
-        if ((currentYear === 2025 && currentMonth === 10 && i === 11) ||
-          (currentYear === 2025 && currentMonth === 11 && (i === 12 || i === 24 || i === 25 || i === 31))) {
+        // 11/11 & 12/12 生日高亮（2025、2026）
+        if (((currentYear === 2025 || currentYear === 2026) && currentMonth === 10 && i === 11) ||
+          ((currentYear === 2025 || currentYear === 2026) && currentMonth === 11 && (i === 12 || i === 24 || i === 25 || i === 31))) {
           dayElem.className += ' bg-rose-200/40 text-white font-semibold';
         }
 
@@ -785,15 +875,16 @@ body * {
       } else if (currentMonth === 5) {
         eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
           '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>🍫 6/1 德克薩斯的生日</li>' +
           '<li>🎂 6/13 我的生日</li>' +
           '<li>⭐ 6/26 初華的生日</li>' +
           '</ul>';
-      } else if (currentYear === 2025 && currentMonth === 10) {
+      } else if ((currentYear === 2025 || currentYear === 2026) && currentMonth === 10) {
         eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
           '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
           '<li>🍷 11/11 拉普蘭德的生日</li>' +
           '</ul>';
-      } else if (currentYear === 2025 && currentMonth === 11) {
+      } else if ((currentYear === 2025 || currentYear === 2026) && currentMonth === 11) {
         eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
           '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
           '<li>😈 12/12 莫斯提馬的生日</li>' +
@@ -965,7 +1056,7 @@ setInterval(createBread, 2000);
   <img src="star_sparkle.png" class="corner-star tl" alt="星星角落左上">
   <img src="star_sparkle.png" class="corner-star br" alt="星星角落右下">
   <div class="space-x-2 text-xs">
-   <h2 class="text-xl font-extrabold text-fuchsia-200 mb-4 tracking-wide text-center md:text-left main-title">
+   <h2 class="text-xl font-extrabold text-rose-200 mb-4 tracking-wide text-center md:text-left main-title">
   ✨ 關於我 ｜ 菠蘿麵包
 </h2>
      <div class="mb-4 md:flex md:flex-row md:items-center md:space-x-2">
@@ -980,112 +1071,143 @@ setInterval(createBread, 2000);
        </div>
      </div>
   </div>
-<div class="tab-content" data-tab="intro">
+<div class="tab-content mt-4" data-tab="intro">
 
 
-  <!-- 🎯 段落 1：身份與定位 -->
- <h3 class="nebula-subtitle">暱稱</h3>
+ <h3 class="nebula-subtitle nebula-subtitle--fuchsia">暱稱</h3>
   <p class="mb-4 leading-relaxed text-white/80">
-    我是菠蘿麵包，可以叫我麵包 / 菠蘿 / 雪球，只要讓我知道在叫我就行。<br>
+    可以叫我麵包 / 菠蘿 / 雪球，只要讓我知道在叫我就行。<br>
     現為在逃社畜，出沒時間不一定，夜行性麵包，白天睡覺晚上出沒。
   </p>
+  <hr class="border-t border-white/20 my-4">
 
-<h3 class="nebula-subtitle">性格</h3>
+<h3 class="nebula-subtitle nebula-subtitle--pink">性格</h3>
   <p class="mb-4 leading-relaxed text-white/80">
     平常話不多，但如果遇到有相同興趣的人話就會變得比較多話<br>
     會吐槽自己，是個怪人（欸）
   </p>
 
-<h3 class="nebula-subtitle">活動範圍</h3>
+  <hr class="border-t border-white/20 my-4">
+<h3 class="nebula-subtitle nebula-subtitle--indigo">活動範圍</h3>
   <p class="mb-4 leading-relaxed text-white/80">
     座標台灣北部，時常跑場次（CWT、FF、PF 等）<br>
     場次通常是有人約才出門，最近因為身體狀況比較少跑場次了
   </p>
 
-<h3 class="nebula-subtitle">個人風格</h3>
+  <hr class="border-t border-white/20 my-4">
+<h3 class="nebula-subtitle nebula-subtitle--fuchsia">個人風格</h3>
   <p class="leading-relaxed text-white/80">
     我的思考方式有點奇怪，所以常常會跳話題，有點電波系這樣（？）<br>
     但自認很好聊天（大概）
   </p>
+
+  <hr class="border-t border-white/20 my-4">
+<h3 class="nebula-subtitle nebula-subtitle--pink">愛買又愛賭</h3>
+  <p class="leading-relaxed text-white/80">
+    常常會在地下街或是小紅書直播間上賭盲抽<br>
+    如果去方舟相關的直播間常常可以抓到我<br>
+    閒魚是24小時住在裡面(救命)<br>
+    <br>
+    我需要有人來阻止我賭博……
+  </p>
   </div>
-<div class="tab-content" data-tab="redflag">
+<div class="tab-content mt-4" data-tab="redflag">
   <!-- 標題 -->
-  <h3 class="nebula-subtitle">關於雷點</h3>
-
-  <!-- 段落 1：可能會雷的地方 -->
   <p class="mb-4 leading-relaxed text-white/80">
-    可能會雷到你的地方：<br>
-    髒話（熟了之後）、表情符號（例如 🫶）、句尾波浪號（有時）、中國用語、不讀不回(嚴重)、米遊
+    <span class="redflag-label">可能會雷到你的地方：</span><br>
+    <span class="text-white/80">我很常滑<span class="text-red-400">小紅書</span>、<span class="text-red-400">閒魚</span>之類的<span class="text-red-400">中國軟體</span>，所以很常會有<span class="text-red-400">中國用語</span>出現，但大多是周邊相關用語<br>(例如：吃谷)，如果會雷請迴避</span><br>
+    <br>
+    其它：<br>
+    髒話（熟了之後）<br>
+    表情符號（例如 🫶）<br>
+    不讀不回(情況嚴重)<br>
+    米遊(因為退坑所以版上不太會有)<br>
   </p>
 
-  <!-- 段落 2：回覆頻率 -->
-  <p class="mb-4 leading-relaxed text-white/80">
-    回覆的速度有時快有時慢得感人，如果會介意的話請迴避
+  <hr class="border-t border-white/30 mt-1 mb-4" />
+  <p class="leading-relaxed text-white font-normal">
+    <span class="redflag-label">我的雷點：</span><br>
+    • 周邊說教人（巨雷）：買賣是個人自由，不要因為把你推賣掉就擅自在留言區破防<br>
+    • 瘋狂砍價人：基本上很好說話，要談價都可以，但不要一上來就屠龍刀2000砍到1000<br>
+    • 一言不合免運人：買賣前請先考慮運費謝謝
   </p>
 
-  <!-- 段落 3：明確雷點列舉 -->
-  <p class="leading-relaxed text-pink-400 font-semibold">
-    雷點：周邊說教人（巨雷）、瘋狂砍價人、一言不合免運人
+  <hr class="border-t border-white/30 my-4" />
+  <p class="mb-4 leading-relaxed text-white/80">
+    <span class="redflag-label">私訊方面：</span><span class="text-white/80">不太擅長和不熟的人私訊聊天，但如果熟了會比較開放(但回覆速度依舊不穩定)</span>
   </p>
 </div>
-  <div class="tab-content" data-tab="fandom">
-  <!-- 坑單容器 - 固定寬度 -->
+  <div class="tab-content mt-4" data-tab="fandom">
   <div class="max-w-4xl mx-auto">
-  <!-- 區塊：目前主坑 -->
-  <div class="mb-8">
-    <h4 class="nebula-subtitle">目前主坑（2025/11/17 更新）</h4>
-    <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-2 text-sm">
+  <div class="mb-1">
+    <h4 class="nebula-subtitle fandom-title-primary">目前主坑（2026/04/21 更新）</h4>
+    <ul class="fandom-main-list list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap whitespace-nowrap">魔法少女的魔女裁判</span>：最近周邊賭很兇。大家快去玩遊戲！！
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：陸服開服玩家，但退遊戲有點久，現以劇情為主。
       </li>
     </ul>
   </div>
+
+  <hr class="fandom-divider border-t border-white/30" />
 
   <!-- 區塊：暫退關注中 -->
   <div class="mb-8">
-    <h4 class="nebula-subtitle">暫退關注中</h4>
-    <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-2 text-sm">
+    <h4 class="nebula-subtitle">有坑過&微量</h4>
+    <ul class="fandom-lite-list list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">ave mujica</span>：一切都是武士道的錯
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>
       </li>
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：日服開服玩家，但後面太懶了就退遊戲坑了。尼祿全肯定，陛下我又想聽妳唱歌了(不是)
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">口袋可可雙子物語</span>
       </li>
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：已退遊戲，但仍有在關注新角色跟劇情。
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>
       </li>
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：已退遊戲，有感興趣的新活動會去看劇情。
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">崩壞：星穹鐵道</span>
       </li>
       <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">ARCAEA</span>：光和對立終章後暫退遊戲，主要是沒時間玩，有出新曲會去看看譜面。
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>
       </li>
-    </ul>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">ARCAEA</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">闇影詩章(1、2)</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟：終末地</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">原神</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">崩壞3</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">重返未來1999</span>
+      </li>
+      <li>
+        <span class="fandom-tag bg-purple-800/30 text-purple-100 text-sm mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ!</span>
+     </ul>
+     <p class="fandom-note">以上是我最有印象的坑，玩過的遊戲很雜，有很多我沒放上去的。</p>
   </div>
 
-  <!-- 區塊：預計回坑 -->
-  <div class="mb-6">
-    <h4 class="nebula-subtitle">預計回坑</h4>
-    <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-2 text-sm">
-      <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：預計回坑，以陸服為主。
-      </li>
-      <li>
-        <span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">闇影詩章(1、2)</span>：有玩一代。其實已經回坑，但，闇影詩章背叛了我.jpg
-      </li>
-    </ul>
-  </div>
-  </div> <!-- 結束坑單容器 -->
+  </div> 
 </div>
-<div class="tab-content hidden" data-tab="pairing">
+<div class="tab-content mt-4 hidden" data-tab="pairing">
   
   <!-- 最近版上常嚎的 -->
   <div class="mb-6">
       <h4 class="nebula-subtitle">最近版上常嚎的</h4>
-    <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>：(主推) 黑部ナノカ；(副推)橘シェリー</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：(主推) 易、莫斯提馬、拉普蘭德；(副推)水月、德克薩斯 </li>
-    </ul>
+    <div class="text-white/85 leading-relaxed text-sm">
+      <h5 class="mb-2"><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold border border-purple-600/40 whitespace-nowrap">明日方舟</span></h5>
+      <p>【主推】德克薩斯</p>
+      <p>【副推】拉普蘭德</p>
+      <p>【好感】莫斯提馬、易</p>
+      <br>
+      基本上是主推 >>> 副推 > 好感 這樣
+    </div>
   </div>
   
   <hr class="border-t border-white/30 my-6" />
@@ -1094,8 +1216,9 @@ setInterval(createBread, 2000);
   <div class="mb-6">
       <h4 class="nebula-subtitle">其它有坑過的</h4>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>：(主推) 黑部ナノカ；(副推)橘シェリー</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ</span>：(主推) 三角初華</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：(主推) 尼祿、呆毛王；(副推) 恩奇都、貝德維爾</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：(主推) 尼祿；(副推) 阿爾托莉亞、恩奇都、貝德維爾</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：刻律德菈</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：(主推) 日野森志步；(副推) 東雲繪名</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">原神</span>：溫迪、楓原萬葉</li>
@@ -1108,7 +1231,7 @@ setInterval(createBread, 2000);
   <div class="mb-6">
     <h3 class="nebula-subtitle">CP(基本雜食，以下列出的是比較愛吃的)</h3>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 mb-4">
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：雙狼(基本站德拉)、莫能<span class="text-red-400">(莫斯提馬不吃莫能以外的CP)</span></li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：最喜歡雙狼(基本站德拉)；其次快遞組、雙天使</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：丹恆相關 CP 只吃丹穹／丹星。</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">邦邦</span>：主食モカ蘭、燈祥</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：類司、みずえな</li>
@@ -1119,7 +1242,7 @@ setInterval(createBread, 2000);
   </div>
 </div>
 <!-- 卡片4：社群帳號 -->
-<div class="tab-content hidden" data-tab="social">
+<div class="tab-content mt-4 hidden" data-tab="social">
   <h2 class="nebula-subtitle">可以到下面的社群找我</h2>
   <p class="text-sm leading-relaxed space-y-1">
     <a href="https://www.facebook.com/share/18BsNi6K1v/?mibextid=wwXIfr" class="block text-blue-400 underline" target="_blank">
@@ -1147,22 +1270,6 @@ setInterval(createBread, 2000);
         <button id="uika-birthday-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8594;</button>
       </div>
       <div id="uika-birthday-indicators" class="flex justify-center gap-2 mt-3"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 🎮 近期遊戲截圖（獨立展示卡） -->
-<section class="mt-20 mb-16">
-  <div class="max-w-2xl mx-auto px-6">
-    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl text-white text-center border border-white/10">
-      <h3 class="text-xl font-bold text-yellow-300 mb-4 main-title">遊戲ID｜歡迎加友</h3>
-      <div class="overflow-hidden rounded-xl">
-        <img src="BD.png" alt="遊戲截圖" class="w-[480px] max-w-full h-auto object-contain rounded-xl shadow-lg">
-        <p class="text-base text-white font-semibold mt-4 tracking-wide">
-          バンドリ日服ID：<span class="font-mono">29730501</span>
-        </p>
-        </p>
-      </div>
     </div>
   </div>
 </section>
