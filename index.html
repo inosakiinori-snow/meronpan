@@ -828,16 +828,21 @@ body * {
           dayElem.className += ' border-2 border-yellow-200 bg-white/20 text-yellow-200 font-semibold';
         }
         
+        // 7/25 明日方舟only 高亮
+        if (currentMonth === 6 && i === 25) {
+          dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
+        }
+        
         // 2025/8/16, 17, 22, 23, 24 高亮（更淡，數字白色）
         if (currentYear === 2025 && currentMonth === 7 && (i === 16 || i === 17 || i === 22 || i === 23 || i === 24)) {
           dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
         }
         
-        // 6月生日：1、13、26 淡紫色高亮，hover 時顯示 emoji
-        if (currentMonth === 5 && (i === 1 || i === 13 || i === 26)) {
+        // 6月生日：1、13 淡紫色高亮，hover 時顯示 emoji
+        if (currentMonth === 5 && (i === 1 || i === 13)) {
           dayElem.className += ' bg-fuchsia-100/30 text-white font-semibold';
           dayElem.onmouseenter = function() {
-            let emoji = i === 1 ? '🍫' : (i === 13 ? '🎂' : '⭐');
+            let emoji = i === 1 ? '🍫' : '🎂';
             let badge = document.createElement('span');
             badge.textContent = emoji;
             badge.style.position = 'absolute';
@@ -872,12 +877,16 @@ body * {
           '<li>16、17：CWT70台北場</li>' +
           '<li>22~24：FF45</li>' +
           '</ul>';
+      } else if (currentMonth === 6) {
+        eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
+          '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
+          '<li>7/25：明日方舟only</li>' +
+          '</ul>';
       } else if (currentMonth === 5) {
         eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
           '<ul class="text-sm text-white/80 text-left pl-4 mb-1" style="list-style: disc inside;">' +
           '<li>🍫 6/1 德克薩斯的生日</li>' +
           '<li>🎂 6/13 我的生日</li>' +
-          '<li>⭐ 6/26 初華的生日</li>' +
           '</ul>';
       } else if ((currentYear === 2025 || currentYear === 2026) && currentMonth === 10) {
         eventHTML = '<div class="text-yellow-200 font-semibold text-center mb-3">當月記事</div>' +
@@ -1153,7 +1162,6 @@ setInterval(createBread, 2000);
 
   <hr class="fandom-divider border-t border-white/30" />
 
-  <!-- 區塊：暫退關注中 -->
   <div class="mb-8">
     <h4 class="nebula-subtitle">有坑過&微量</h4>
     <ul class="fandom-lite-list list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
@@ -1219,14 +1227,15 @@ setInterval(createBread, 2000);
   <div class="mb-6">
       <h4 class="nebula-subtitle">其它有坑過的</h4>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 text-sm">
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">starsavior</span>：(主推)希爾德；(副推)夏爾</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">starsavior</span>：(主推)希爾德、塔妮婭；(副推)夏爾</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">魔法少女的魔女裁判</span>：(主推) 黑部ナノカ；(副推)橘シェリー</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ</span>：(主推) 三角初華</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：(主推) 尼祿；(副推) 阿爾托莉亞、恩奇都、貝德維爾</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：刻律德菈</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">バンドリ</span>：(主推) 三角初華、青葉モカ</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">FGO</span>：(主推) 尼祿；(副推) 阿爾托莉亞、貝德維爾</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：刻律德菈、丹恆</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：(主推) 日野森志步；(副推) 東雲繪名</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">原神</span>：溫迪、楓原萬葉</li>
       <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">重返未來1999</span>：維爾汀、槲寄生、紅弩箭、37</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">鳴潮</span>：嘉貝莉娜</li>
     </ul>
   </div>
   
@@ -1235,10 +1244,7 @@ setInterval(createBread, 2000);
   <div class="mb-6">
     <h3 class="nebula-subtitle">CP(基本雜食，以下列出的是比較愛吃的)</h3>
     <ul class="list-disc list-inside text-white/80 leading-relaxed space-y-1 mb-4">
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：最喜歡雙狼(基本站德拉)；其次快遞組、雙天使</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">崩鐵</span>：丹恆相關 CP 只吃丹穹／丹星。</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">邦邦</span>：主食モカ蘭、燈祥</li>
-      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">プロセカ</span>：類司、みずえな</li>
+      <li><span class="inline-block bg-purple-800/30 text-purple-100 px-2 py-1 rounded text-sm font-semibold mr-2 border border-purple-600/40 whitespace-nowrap">明日方舟</span>：最喜歡雙狼(左右不分)；其次快遞組、雙天使</li>
     </ul>
     <p class="text-red-400 leading-relaxed font-medium">
       乙女向作品不吃任何腐向配對。
@@ -1262,18 +1268,30 @@ setInterval(createBread, 2000);
 </div>
 </div>
 
-<!-- 🎂 2025.6.26 初華生誕祭 獨立展示卡 -->
+<!-- 🐰 【我家的德兔們】獨立展示卡 -->
 <section class="mt-20 mb-16">
   <div class="max-w-2xl mx-auto px-6">
-    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl shadow-[0_0_32px_#FFD70080] ring-4 ring-yellow-200/40 text-white text-center border-4 border-yellow-300 relative overflow-visible">
-      <h3 class="text-xl font-bold text-yellow-300 mb-4 main-title">2025.6.26 初華生誕祭</h3>
+    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl shadow-[0_0_32px_#FF8C0080] ring-4 ring-orange-500/40 text-white text-center border-4 border-orange-500 relative overflow-visible">
+      <h3 class="text-xl font-bold text-orange-300 mb-4 main-title">【我家的德兔們】</h3>
       <div class="relative overflow-hidden rounded-xl">
-        <img id="uika-birthday-img" src="uika_2025.PNG" alt="初華生誕祭" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
-        <!-- 左右切換按鈕 -->
-        <button id="uika-birthday-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8592;</button>
-        <button id="uika-birthday-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8594;</button>
+        <img src="Texas_2026_10.jpeg" alt="我家的德兔們" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
       </div>
-      <div id="uika-birthday-indicators" class="flex justify-center gap-2 mt-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 🤠 德克薩斯2026.06.01 生賀 獨立展示卡 -->
+<section class="mt-20 mb-16">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-xl shadow-[0_0_32px_#1e3a8a80] ring-4 ring-blue-900/40 text-white text-center border-4 border-blue-900 relative overflow-visible">
+      <h3 class="text-xl font-bold text-blue-300 mb-4 main-title">【德克薩斯2026.06.01 生賀】</h3>
+      <div class="relative overflow-hidden rounded-xl">
+        <img id="texas-gallery-img" src="Texas_2026_01.jpeg" alt="德克薩斯2026.06.01 生賀" class="w-full max-w-md mx-auto h-auto object-contain rounded-xl shadow-lg transition-all duration-300">
+        <!-- 左右切換按鈕 -->
+        <button id="texas-gallery-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8592;</button>
+        <button id="texas-gallery-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center z-10">&#8594;</button>
+      </div>
+      <div id="texas-gallery-indicators" class="flex justify-center gap-2 mt-3"></div>
     </div>
   </div>
 </section>
@@ -1396,30 +1414,31 @@ function drawFortuneDesktop() {
   }, 75);
 }
 
-// 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
+// Texas 2026 圖片輪播
 window.addEventListener('DOMContentLoaded', function() {
   const imgList = [
-    'uika_2025.PNG',
-    'uika_2025_01.PNG',
-    'uika_2025_02.jpeg',
-    'uika_2025_03.PNG',
-    'uika_2025_04.PNG',
-    'uika_2025_05.PNG',
-    'uika_2025_06.DNG'
+    'Texas_2026_01.jpeg',
+    'Texas_2026_02.jpeg',
+    'Texas_2026_03.jpeg',
+    'Texas_2026_04.jpeg',
+    'Texas_2026_05.jpeg',
+    'Texas_2026_06.jpeg',
+    'Texas_2026_07.jpeg',
+    'Texas_2026_08.jpeg',
+    'Texas_2026_09.jpeg'
   ];
   let current = 0;
-  const imgEl = document.getElementById('uika-birthday-img');
-  const prevBtn = document.getElementById('uika-birthday-prev');
-  const nextBtn = document.getElementById('uika-birthday-next');
-  const indicators = document.getElementById('uika-birthday-indicators');
+  const imgEl = document.getElementById('texas-gallery-img');
+  const prevBtn = document.getElementById('texas-gallery-prev');
+  const nextBtn = document.getElementById('texas-gallery-next');
+  const indicators = document.getElementById('texas-gallery-indicators');
   if (!imgEl || !prevBtn || !nextBtn) return;
   function update() {
     imgEl.src = imgList[current];
-    // 指示器
     indicators.innerHTML = '';
     imgList.forEach((_, i) => {
       const dot = document.createElement('span');
-      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
+      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-blue-400' : 'bg-white/30');
       dot.style.cursor = 'pointer';
       dot.onclick = () => { current = i; update(); };
       indicators.appendChild(dot);
@@ -1435,6 +1454,7 @@ window.addEventListener('DOMContentLoaded', function() {
   };
   update();
 });
+
 // 左下角人物動態插入，永遠最上層且不會跟著內容滾動，含彩蛋互動
 window.addEventListener('DOMContentLoaded', function() {
   if (!document.getElementById('global-inori-pan')) {
@@ -1582,30 +1602,31 @@ function drawFortuneDesktop() {
     }, 75);
   }
 
-// 初華生誕祭圖片輪播：手動指定圖片檔名，不卡頓
+// Texas 2026 圖片輪播
 window.addEventListener('DOMContentLoaded', function() {
   const imgList = [
-    'uika_2025.PNG',
-    'uika_2025_01.PNG',
-    'uika_2025_02.jpeg',
-    'uika_2025_03.PNG',
-    'uika_2025_04.PNG',
-    'uika_2025_05.PNG',
-    'uika_2025_06.DNG'
+    'Texas_2026_01.jpeg',
+    'Texas_2026_02.jpeg',
+    'Texas_2026_03.jpeg',
+    'Texas_2026_04.jpeg',
+    'Texas_2026_05.jpeg',
+    'Texas_2026_06.jpeg',
+    'Texas_2026_07.jpeg',
+    'Texas_2026_08.jpeg',
+    'Texas_2026_09.jpeg'
   ];
   let current = 0;
-  const imgEl = document.getElementById('uika-birthday-img');
-  const prevBtn = document.getElementById('uika-birthday-prev');
-  const nextBtn = document.getElementById('uika-birthday-next');
-  const indicators = document.getElementById('uika-birthday-indicators');
+  const imgEl = document.getElementById('texas-gallery-img');
+  const prevBtn = document.getElementById('texas-gallery-prev');
+  const nextBtn = document.getElementById('texas-gallery-next');
+  const indicators = document.getElementById('texas-gallery-indicators');
   if (!imgEl || !prevBtn || !nextBtn) return;
   function update() {
     imgEl.src = imgList[current];
-    // 指示器
     indicators.innerHTML = '';
     imgList.forEach((_, i) => {
       const dot = document.createElement('span');
-      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-yellow-300' : 'bg-white/30');
+      dot.className = 'inline-block w-2 h-2 rounded-full ' + (i === current ? 'bg-blue-400' : 'bg-white/30');
       dot.style.cursor = 'pointer';
       dot.onclick = () => { current = i; update(); };
       indicators.appendChild(dot);
@@ -1621,6 +1642,7 @@ window.addEventListener('DOMContentLoaded', function() {
   };
   update();
 });
+
 // 左下角人物動態插入，永遠最上層且不會跟著內容滾動，含彩蛋互動
 window.addEventListener('DOMContentLoaded', function() {
   if (!document.getElementById('global-inori-pan')) {
